@@ -1,9 +1,9 @@
-package tp.naevus.representations;
+package tjp.wiji.representations;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import tp.naevus.drawing.Color;
+import tjp.wiji.drawing.Color;
 
 public class LetterRepresentation extends ImageRepresentation {
     public LetterRepresentation(final Color foreColor, final char letter, 

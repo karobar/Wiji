@@ -1,4 +1,4 @@
-package tp.naevus.drawing;
+package tjp.wiji.drawing;
 
 public class Color {
     public static final Color BLACK = new Color(0xFF000000);

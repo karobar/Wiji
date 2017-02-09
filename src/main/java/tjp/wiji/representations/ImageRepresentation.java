@@ -1,6 +1,6 @@
-package tp.naevus.representations;
+package tjp.wiji.representations;
 
-import tp.naevus.drawing.Color;
+import tjp.wiji.drawing.Color;
 
 /**
  *  An ImageRepresentation is the visual representation which occupies one of 

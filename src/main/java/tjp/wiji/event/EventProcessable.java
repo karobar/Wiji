@@ -1,4 +1,4 @@
-package tp.naevus.event;
+package tjp.wiji.event;
    
 /**
  * An EventProcessable Object can handle events.

@@ -1,13 +1,13 @@
-package tp.naevus.gui;
+package tjp.wiji.gui;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
-import tp.naevus.drawing.BitmapContext;
-import tp.naevus.event.EventProcessable;
-import tp.naevus.event.GameEvent;
-import tp.naevus.representations.ImageRepresentation;
+import tjp.wiji.drawing.BitmapContext;
+import tjp.wiji.event.EventProcessable;
+import tjp.wiji.event.GameEvent;
+import tjp.wiji.representations.ImageRepresentation;
 
 /** 
  * A screen is a logical representation of a series of graphical elements and 

@@ -1,4 +1,4 @@
-package tp.naevus.gui;
+package tjp.wiji.gui;
 
 /**
  * A GUIText object is basically just a string with additional functionality for

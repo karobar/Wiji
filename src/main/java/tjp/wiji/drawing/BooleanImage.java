@@ -1,4 +1,4 @@
-package tp.naevus.drawing;
+package tjp.wiji.drawing;
 
 /**
  * A BooleanImage is a bitmap image translated into a two-dimensional array

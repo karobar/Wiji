@@ -1,4 +1,4 @@
-package tp.naevus.drawing;
+package tjp.wiji.drawing;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,9 +7,9 @@ import java.net.URL;
 
 import com.badlogic.gdx.files.FileHandle;
 
-import tp.naevus.representations.Graphic;
-import tp.naevus.representations.GraphicRepresentation;
-import tp.naevus.representations.ImageRepresentation;
+import tjp.wiji.representations.Graphic;
+import tjp.wiji.representations.GraphicRepresentation;
+import tjp.wiji.representations.ImageRepresentation;
 
 public class BitmapContext {
     public final static int DEFAULT_CHAR_PIXEL_WIDTH  = 8;

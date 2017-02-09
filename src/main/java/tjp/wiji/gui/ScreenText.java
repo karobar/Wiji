@@ -1,8 +1,8 @@
-package tp.naevus.gui;
+package tjp.wiji.gui;
 
-import tp.naevus.drawing.BitmapContext;
-import tp.naevus.drawing.Color;
-import tp.naevus.representations.ImageRepresentation;
+import tjp.wiji.drawing.BitmapContext;
+import tjp.wiji.drawing.Color;
+import tjp.wiji.representations.ImageRepresentation;
 
 /**
  * @author      Travis Pressler (travisp471@gmail.com)

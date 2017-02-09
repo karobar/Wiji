@@ -1,4 +1,4 @@
-package tp.naevus.event;
+package tjp.wiji.event;
 
 /**
  * @author      Travis Pressler (travisp471@gmail.com)

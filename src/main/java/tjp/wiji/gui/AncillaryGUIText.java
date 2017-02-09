@@ -1,4 +1,4 @@
-package tp.naevus.gui;
+package tjp.wiji.gui;
 
 /**
  * @author      Travis Pressler (travisp471@gmail.com)

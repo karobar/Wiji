@@ -1,4 +1,4 @@
-package tp.naevus.event;
+package tjp.wiji.event;
 
 import java.util.LinkedList;
 

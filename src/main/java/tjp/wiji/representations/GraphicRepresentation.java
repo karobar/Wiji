@@ -1,6 +1,6 @@
-package tp.naevus.representations;
+package tjp.wiji.representations;
 
-import tp.naevus.drawing.Color;
+import tjp.wiji.drawing.Color;
 
 public class GraphicRepresentation extends ImageRepresentation {
     public GraphicRepresentation(final Color foreColor, final Graphic image, 

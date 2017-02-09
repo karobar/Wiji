@@ -1,4 +1,4 @@
-package tp.naevus.drawing;
+package tjp.wiji.drawing;
 
 import java.net.URISyntaxException;
 import com.badlogic.gdx.ApplicationAdapter;
@@ -7,11 +7,12 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import tp.naevus.event.EventProcessable;
-import tp.naevus.event.EventProcessor;
-import tp.naevus.event.GameEvent;
-import tp.naevus.gui.Screen;
-import tp.naevus.representations.ImageRepresentation;
+
+import tjp.wiji.event.EventProcessable;
+import tjp.wiji.event.EventProcessor;
+import tjp.wiji.event.GameEvent;
+import tjp.wiji.gui.Screen;
+import tjp.wiji.representations.ImageRepresentation;
 
 public abstract class MainFrame extends ApplicationAdapter
         implements InputProcessor {
@@ -118,6 +119,12 @@ public abstract class MainFrame extends ApplicationAdapter
             }
         }
         batch.end();
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
     
     private void configureShaderForCell(final Color backColor, final Color foreColor) {

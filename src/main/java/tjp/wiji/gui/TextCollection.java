@@ -1,14 +1,14 @@
-package tp.naevus.gui;
+package tjp.wiji.gui;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import tp.naevus.drawing.BitmapContext;
-import tp.naevus.drawing.Color;
-import tp.naevus.representations.ImageRepresentation;
-import tp.naevus.representations.LetterRepresentation;
+import tjp.wiji.drawing.BitmapContext;
+import tjp.wiji.drawing.Color;
+import tjp.wiji.representations.ImageRepresentation;
+import tjp.wiji.representations.LetterRepresentation;
 
 public abstract class TextCollection {
     private final List<GUIText> textCollection = new ArrayList<GUIText>();

@@ -1,4 +1,4 @@
-package tp.naevus.representations;
+package tjp.wiji.representations;
 
 public enum Graphic {
     EMPTY_CELL(0),
