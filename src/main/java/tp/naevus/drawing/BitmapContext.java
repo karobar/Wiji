@@ -1,0 +1,72 @@
+package tp.naevus.drawing;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.URISyntaxException;
+import java.net.URL;
+
+import com.badlogic.gdx.files.FileHandle;
+
+import tp.naevus.representations.Graphic;
+import tp.naevus.representations.GraphicRepresentation;
+import tp.naevus.representations.ImageRepresentation;
+
+public class BitmapContext {
+    public final static int DEFAULT_CHAR_PIXEL_WIDTH  = 8;
+    public final static int DEFAULT_CHAR_PIXEL_HEIGHT = 12;
+    private final int charPixelWidth, charPixelHeight;
+    private final FileHandle charsheet; 
+    
+    /**
+     * Defaults for char pixel height, width, and charsheet.
+     * @throws URISyntaxException 
+     */
+    public BitmapContext() throws URISyntaxException {
+        this.charPixelWidth = DEFAULT_CHAR_PIXEL_WIDTH;
+        this.charPixelHeight = DEFAULT_CHAR_PIXEL_HEIGHT;
+        
+        URL path = getClass().getResource("charsheet_8x12.bmp");
+        File charFile = new File(path.toURI());
+        this.charsheet = new FileHandle(charFile);
+    }
+    
+    public BitmapContext(final int charPixelWidth, final int charPixelHeight,
+            final FileHandle charsheet) {
+        
+        this.charPixelWidth = charPixelWidth;
+        this.charPixelHeight = charPixelHeight;
+        this.charsheet = charsheet;
+    }
+    
+    public int getCharPixelWidth() {
+        return charPixelWidth;
+    }
+    
+    public int getCharPixelHeight() {
+        return charPixelHeight;
+    }
+    
+    public FileHandle getCharsheet() {
+        return charsheet;
+    }
+    
+    /**
+     * Nifty tool for translating a bitmap image into a two-dimensional 
+     * array of ImageRepresentations, where the background color of every
+     * ImageRepresentation is grabbed from the corresponding pixel of the 
+     * bitmap image.
+     */
+    public ImageRepresentation[][] bmpToImRep(BufferedImage inBMP){
+        ImageRepresentation[][] finishedImRepMatrix = 
+                new ImageRepresentation[inBMP.getWidth()][inBMP.getHeight()];
+        
+        for(int i=0;i<inBMP.getWidth();i++){
+            for(int j=0;j<inBMP.getHeight(); j++){
+                finishedImRepMatrix[i][j] = 
+                        new GraphicRepresentation(new Color(inBMP.getRGB(i,j)), Graphic.FILLED_CELL,
+                                getCharPixelWidth(), getCharPixelHeight());
+            }
+        }
+        return finishedImRepMatrix;
+    }
+}
