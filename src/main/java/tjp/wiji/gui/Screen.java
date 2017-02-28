@@ -19,14 +19,14 @@ import tjp.wiji.representations.ImageRepresentation;
 public abstract class Screen implements EventProcessable {
     private final Collection<TextCollection> activeGUIElements = new HashSet<TextCollection>();
 
+    final private BitmapContext bitmapContext;
+    
     //how long an animation frame lasts
     final private long FRAME_TIME_IN_MS = 1000;
-    
     //one millisecond is 1000 nanoseconds
     final private long NANO_TO_MS_FACTOR = 1000;
-    private long nanosSinceLastRender = 0;
     
-    final private BitmapContext bitmapContext;
+    private long nanosSinceLastRender = 0;
     
     protected Screen(BitmapContext bitmapContext) {
         this.bitmapContext = bitmapContext;
@@ -36,19 +36,19 @@ public abstract class Screen implements EventProcessable {
         activeGUIElements.add(GUIElement);
     }
     
-    protected abstract ImageRepresentation getCurrentCell(int i, int j);
-    
     protected BitmapContext getBitmapContext() {
         return bitmapContext;
     }
     
-    public abstract void handleFrameChange();
+    protected abstract ImageRepresentation getCurrentCell(int i, int j);
+    
+    protected abstract void handleFrameChange();
     
     /**
      * Gets all GUI elements (both screen and map relative) and overrides 
      * the game element representations which are overlaid.
      */
-    void overlayGUI(ImageRepresentation[][] mainImRepMatrix) {
+    private void overlayGUI(ImageRepresentation[][] mainImRepMatrix) {
         for(TextCollection text : activeGUIElements) {
             text.overlayGUI(mainImRepMatrix); 
         }
@@ -66,7 +66,7 @@ public abstract class Screen implements EventProcessable {
     }
     
     /**
-     * Draws the current screen elements to the main frame.
+     * Create a 2d array of ImageRepresentations which will form the final output to the screen.
      * @param inLastRenderTime
      * @return 
      */
@@ -83,7 +83,7 @@ public abstract class Screen implements EventProcessable {
         return mainImRepMatrix;
     }
 
-    public void sendFrameChangeEvery(long frameTime) {
+    protected void sendFrameChangeEvery(long frameTime) {
         if (nanosSinceLastRender > frameTime) {
             handleFrameChange();
             nanosSinceLastRender = 0;

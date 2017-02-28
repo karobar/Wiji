@@ -7,6 +7,8 @@ import java.net.URL;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
+import tjp.wiji.file.FileLoader;
+
 public class ShaderContext {
     private ShaderProgram shader;
     
@@ -18,13 +20,11 @@ public class ShaderContext {
         String vertexShader = makeFileHandle("vertex.glsl").readString();
         String fragmentShader = makeFileHandle("fragment.glsl").readString();
         shader = new ShaderProgram(vertexShader, fragmentShader);
-        ShaderProgram.pedantic = false;
+        shader.pedantic = false;
     }
     
     private FileHandle makeFileHandle(String string) throws URISyntaxException {
-        URL path = getClass().getResource(string);
-        File charFile = new File(path.toURI());
-        return new FileHandle(charFile);
+        return new FileLoader().getFileHandle(string);
     }
     
     public ShaderProgram getShader() {

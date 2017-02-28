@@ -8,9 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import tjp.wiji.event.EventProcessable;
 import tjp.wiji.event.EventProcessor;
-import tjp.wiji.event.GameEvent;
 import tjp.wiji.gui.Screen;
 import tjp.wiji.representations.ImageRepresentation;
 
@@ -81,10 +79,12 @@ public abstract class MainFrame extends ApplicationAdapter
     public boolean keyDown(int keycode) {
         return false;
     }
+
     @Override
     public boolean keyTyped(char character) {
         return false;
     }
+
     @Override
     public boolean keyUp(int keycode) {
         return false;
@@ -93,6 +93,11 @@ public abstract class MainFrame extends ApplicationAdapter
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         return false;
+    }
+    
+    @Override
+    public void dispose() {
+        batch.dispose();
     }
 
     @Override
@@ -105,26 +110,21 @@ public abstract class MainFrame extends ApplicationAdapter
         timeSinceLastRender = 0;
         startTime = System.nanoTime();
         
-        Gdx.gl.glClearColor(1f, 0f, 1f, 1f);
+        Gdx.gl.glClearColor(0f, 1f, 0f, 0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         batch.setShader(shaderContext.getShader());
-        
         int pixelWidth = bitmapContext.getCharPixelWidth();
         int pixelHeight = bitmapContext.getCharPixelHeight();
         for(int row = 0; row < cellsToDraw.length ; row++) {
             for(int col = 0; col < cellsToDraw[row].length ; col++) {
                 ImageRepresentation currCell = cellsToDraw[row][col];
                 drawBatch(row, col, pixelWidth, pixelHeight, currCell);
+                batch.flush();
             }
         }
+        
         batch.end();
-        try {
-            Thread.sleep(1);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
     
     private void configureShaderForCell(final Color backColor, final Color foreColor) {
@@ -139,17 +139,20 @@ public abstract class MainFrame extends ApplicationAdapter
 
         configureShaderForCell(currCell.getBackColor(), currCell.getForeColor());
         
-        int charCodeX = currCell.getImgChar() % getImageGridWidth();
-        int charCodeY = currCell.getImgChar() / getImageGridWidth();
+        int graphicIndex = currCell.getImgChar();
+        int charsheetWidth = bitmapContext.getCharsheetGridHeight();
+        int charCodeX = graphicIndex % charsheetWidth;
+        int charCodeY = graphicIndex / charsheetWidth;
 
-        batch.flush();
+        int x = row * pixelWidth;
+        int y = (heightInSlots - col - 1) * pixelHeight;
         batch.draw(
                 spriteSheet, 
                 //coordinates in screen space
-                row * pixelWidth, (heightInSlots - col - 1) * pixelHeight,
+                x, y,
                 //coordinates of the scaling and rotation origin 
                 //relative to the screen space coordinates
-                row * pixelWidth, (heightInSlots - col - 1) * pixelHeight,
+                x, y,
                 //width and height in pixels
                 pixelWidth, pixelHeight, 
                 //scale of the rectangle around originX/originY
@@ -160,7 +163,7 @@ public abstract class MainFrame extends ApplicationAdapter
                 //coordinates in texel space
                 charCodeX * pixelWidth, charCodeY * pixelHeight, 
                 //source width and height in texels
-                8, 12,
+                pixelWidth, pixelHeight,
                 //whether to flip the sprite horizontally or vertically
                 false,false);
     }

@@ -7,6 +7,7 @@ import java.net.URL;
 
 import com.badlogic.gdx.files.FileHandle;
 
+import tjp.wiji.file.FileLoader;
 import tjp.wiji.representations.Graphic;
 import tjp.wiji.representations.GraphicRepresentation;
 import tjp.wiji.representations.ImageRepresentation;
@@ -14,6 +15,7 @@ import tjp.wiji.representations.ImageRepresentation;
 public class BitmapContext {
     public final static int DEFAULT_CHAR_PIXEL_WIDTH  = 8;
     public final static int DEFAULT_CHAR_PIXEL_HEIGHT = 12;
+    public final static int CHARSHEET_GRID_HEIGHT = 16;
     private final int charPixelWidth, charPixelHeight;
     private final FileHandle charsheet; 
     
@@ -24,10 +26,7 @@ public class BitmapContext {
     public BitmapContext() throws URISyntaxException {
         this.charPixelWidth = DEFAULT_CHAR_PIXEL_WIDTH;
         this.charPixelHeight = DEFAULT_CHAR_PIXEL_HEIGHT;
-        
-        URL path = getClass().getResource("charsheet_8x12.bmp");
-        File charFile = new File(path.toURI());
-        this.charsheet = new FileHandle(charFile);
+        this.charsheet = new FileLoader().getFileHandle("charsheet_8x12.bmp");
     }
     
     public BitmapContext(final int charPixelWidth, final int charPixelHeight,
@@ -44,6 +43,10 @@ public class BitmapContext {
     
     public int getCharPixelHeight() {
         return charPixelHeight;
+    }
+    
+    public int getCharsheetGridHeight() {
+        return CHARSHEET_GRID_HEIGHT;
     }
     
     public FileHandle getCharsheet() {
