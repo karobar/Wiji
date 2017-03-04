@@ -22,7 +22,7 @@ public class AncillaryGUIText extends GUIText {
      */
     public AncillaryGUIText(String text, int specX, int specY) {
         this.textString = text;
-        this.specX = specX;
-        this.specY = specY;
+        this.customX = specX;
+        this.customY = specY;
     }
 }

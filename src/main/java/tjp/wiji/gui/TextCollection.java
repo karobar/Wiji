@@ -1,10 +1,7 @@
 package tjp.wiji.gui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import tjp.wiji.drawing.BitmapContext;
 import tjp.wiji.drawing.Color;
 import tjp.wiji.representations.ImageRepresentation;
@@ -112,6 +109,8 @@ public abstract class TextCollection {
     
     public abstract int getScreenY();
     
+    public abstract boolean isCentered();
+    
     /**
      * Overlays the TextCollection onto the specified ImageRepresentation grid.
      * For ScreenText, this is simply a displayOnto. For MapText, the text must
@@ -119,6 +118,11 @@ public abstract class TextCollection {
      * @param mainImRepMatrix 
      */
     public abstract void overlayGUI(ImageRepresentation[][] mainImRepMatrix);
+    
+    private int findCenterPoint(int width, int stringWidth) {
+        return (width - stringWidth) / 2;
+    }
+    
     
     /**
      * Overwrites screen squares with the choiceList.
@@ -130,47 +134,58 @@ public abstract class TextCollection {
      * @param displayArea the displayArea which will be over-written
      */
     public void displayOnto(ImageRepresentation[][] displayArea, BitmapContext bitmapContext) {
-        int currentX = getScreenX();
         int currentY = getScreenY();
         //cycle through all the GUIText elements
         for(int i = 0; i < textCollection.size(); i++){
             GUIText currText = textCollection.get(i);
             //turns the choice's textString into an array of ints
             String choiceName = currText.getName();
+            
+            int currentX;
+            if (this.isCentered()) {
+                currentX = findCenterPoint(displayArea.length, choiceName.length()); 
+            } else {
+                currentX = getScreenX();
+            }
+
             //loop over all the integers (representing chars)
             for(int j = 0; j < choiceName.length() ;j++){
                 char currentLetter = choiceName.charAt(j);
-                ImageRepresentation currentImg;
-                if(currText instanceof AncillaryGUIText) {
-                    currentImg = new LetterRepresentation(
-                                    DEFAULT_ANCILLARY_TEXT_COLOR, 
-                                    Color.BLACK, 
-                                    currentLetter,
-                                    bitmapContext.getCharPixelWidth(),
-                                    bitmapContext.getCharPixelHeight());
-                }
-                else if((i == currentChoiceIndex) && activeColor != null){
-                    currentImg = new LetterRepresentation(
-                            this.getActiveColor(), 
-                            Color.BLACK, 
-                            currentLetter,
-                            bitmapContext.getCharPixelWidth(),
-                            bitmapContext.getCharPixelHeight());
-                } 
-                else {
-                    currentImg = new LetterRepresentation(
-                            this.getInactiveColor(), 
-                            Color.BLACK,
-                            currentLetter,
-                            bitmapContext.getCharPixelWidth(),
-                            bitmapContext.getCharPixelHeight());
-                }        
-                displayArea[(currText.specX >= 0) ? currText.specX + j :  currentX]
-                           [(currText.specY >= 0) ? currText.specY : currentY] = currentImg;
+                ImageRepresentation currentImg = determineCurrImg(currText, currentLetter,
+                        bitmapContext, i);
+                  
+                displayArea[(currText.customX >= 0) ? currText.customX + j :  currentX]
+                           [(currText.customY >= 0) ? currText.customY : currentY] = currentImg;
                 currentX++;
             }
-            currentX = getScreenX();
             currentY++;
         }        
+    }
+    
+    private ImageRepresentation determineCurrImg(GUIText currText, char currentLetter,
+            BitmapContext bitmapContext, int currIndex) {
+ 
+        if(currText instanceof AncillaryGUIText) {
+            return new LetterRepresentation(
+                    DEFAULT_ANCILLARY_TEXT_COLOR, 
+                    Color.BLACK, 
+                    currentLetter,
+                    bitmapContext.getCharPixelWidth(),
+                    bitmapContext.getCharPixelHeight());
+        } else if((currIndex == currentChoiceIndex) && activeColor != null){
+            return new LetterRepresentation(
+                    this.getActiveColor(), 
+                    Color.BLACK, 
+                    currentLetter,
+                    bitmapContext.getCharPixelWidth(),
+                    bitmapContext.getCharPixelHeight());
+        } else {
+            return new LetterRepresentation(
+                    this.getInactiveColor(), 
+                    Color.BLACK,
+                    currentLetter,
+                    bitmapContext.getCharPixelWidth(),
+                    bitmapContext.getCharPixelHeight());
+        }
     }
 }

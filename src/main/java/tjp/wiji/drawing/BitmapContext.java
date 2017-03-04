@@ -4,7 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLClassLoader;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
 import tjp.wiji.file.FileLoader;
@@ -17,7 +19,8 @@ public class BitmapContext {
     public final static int DEFAULT_CHAR_PIXEL_HEIGHT = 12;
     public final static int CHARSHEET_GRID_HEIGHT = 16;
     private final int charPixelWidth, charPixelHeight;
-    private final FileHandle charsheet; 
+    private FileHandle charsheet; 
+    private final static String DEFAULT_CHARSHEET = "charsheet_8x12.bmp";
     
     /**
      * Defaults for char pixel height, width, and charsheet.
@@ -26,7 +29,6 @@ public class BitmapContext {
     public BitmapContext() throws URISyntaxException {
         this.charPixelWidth = DEFAULT_CHAR_PIXEL_WIDTH;
         this.charPixelHeight = DEFAULT_CHAR_PIXEL_HEIGHT;
-        this.charsheet = new FileLoader().getFileHandle("charsheet_8x12.bmp");
     }
     
     public BitmapContext(final int charPixelWidth, final int charPixelHeight,
@@ -35,6 +37,14 @@ public class BitmapContext {
         this.charPixelWidth = charPixelWidth;
         this.charPixelHeight = charPixelHeight;
         this.charsheet = charsheet;
+    }
+    
+    /**
+     * IMPORTANT: You can only reference Gdx.files.internal during/after
+     * the create() method has been called.
+     */
+    public void init() {
+        this.charsheet = Gdx.files.internal("charsheet_8x12.bmp");
     }
     
     public int getCharPixelWidth() {

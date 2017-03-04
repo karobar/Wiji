@@ -15,8 +15,8 @@ public class GUIText {
     /** If a GUIText element is a BGthief, it will steal the color from the
       *element underneath. */
     public boolean BGthief = false;
-    int specX = -1;
-    int specY = -1;
+    int customX = -1;
+    int customY = -1;
     
     public GUIText() {}
     
@@ -38,8 +38,8 @@ public class GUIText {
     public GUIText(String text, int specX, int specY) {
         this.textString = text;
         //textCodes = Translator.translate(text);
-        this.specX = specX;
-        this.specY = specY;
+        this.customX = specX;
+        this.customY = specY;
     }
     
     /**

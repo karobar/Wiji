@@ -1,12 +1,10 @@
 package tjp.wiji.gui;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
 import tjp.wiji.drawing.BitmapContext;
 import tjp.wiji.event.EventProcessable;
-import tjp.wiji.event.GameEvent;
 import tjp.wiji.representations.ImageRepresentation;
 
 /** 

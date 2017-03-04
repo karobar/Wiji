@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import tjp.wiji.event.EventProcessor;
+import tjp.wiji.event.GameEvent;
 import tjp.wiji.gui.Screen;
 import tjp.wiji.representations.ImageRepresentation;
 
@@ -47,6 +48,8 @@ public abstract class MainFrame extends ApplicationAdapter
         Gdx.input.setInputProcessor(this);
         
         batch = new SpriteBatch();
+        
+        bitmapContext.init();
         spriteSheet = new Texture(bitmapContext.getCharsheet());
         try {
             shaderContext = new ShaderContext();
@@ -63,10 +66,6 @@ public abstract class MainFrame extends ApplicationAdapter
         return this.currentScreen;
     }
     
-    private BitmapContext getBitmapContext() {
-        return bitmapContext;
-    }
-    
     protected int getImageGridHeight() {
         return heightInSlots;
     }
@@ -76,22 +75,23 @@ public abstract class MainFrame extends ApplicationAdapter
     }
     
     @Override
-    public boolean keyDown(int keycode) {
+    public final boolean keyDown(int keycode) {
+        getCurrentScreen().handleEvent(new GameEvent(keycode));
         return false;
     }
 
     @Override
-    public boolean keyTyped(char character) {
+    public final  boolean keyTyped(char character) {
         return false;
     }
 
     @Override
-    public boolean keyUp(int keycode) {
+    public final boolean keyUp(int keycode) {
         return false;
     }
     
     @Override
-    public boolean mouseMoved(int screenX, int screenY) {
+    public final boolean mouseMoved(int screenX, int screenY) {
         return false;
     }
     
@@ -169,7 +169,7 @@ public abstract class MainFrame extends ApplicationAdapter
     }
 
     @Override
-    public boolean scrolled(int amount) {
+    public final boolean scrolled(int amount) {
         return false;
     }
 
