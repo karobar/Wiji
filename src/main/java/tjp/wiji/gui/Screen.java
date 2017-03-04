@@ -17,19 +17,21 @@ import tjp.wiji.representations.ImageRepresentation;
 public abstract class Screen implements EventProcessable {
     private final Collection<TextCollection> activeGUIElements = new HashSet<TextCollection>();
 
-    final private BitmapContext bitmapContext;
-    
     //how long an animation frame lasts
     final private long FRAME_TIME_IN_MS = 1000;
+    
     //one millisecond is 1000 nanoseconds
     final private long NANO_TO_MS_FACTOR = 1000;
-    
+
     private long nanosSinceLastRender = 0;
-    
-    protected Screen(BitmapContext bitmapContext) {
+
+    final private BitmapContext bitmapContext;
+    final private ScreenContext screenContext;
+
+    protected Screen(BitmapContext bitmapContext, ScreenContext screenContext) {
         this.bitmapContext = bitmapContext;
+        this.screenContext = screenContext;
     }
-    
     protected void addGUIelement(TextCollection GUIElement) {
         activeGUIElements.add(GUIElement);
     }
@@ -39,6 +41,14 @@ public abstract class Screen implements EventProcessable {
     }
     
     protected abstract ImageRepresentation getCurrentCell(int i, int j);
+    
+    public Screen getCurrentScreen() {
+        return screenContext.getCurrentScreen();
+    }
+    
+    public ScreenContext getScreenContext() {
+        return screenContext;
+    }
     
     protected abstract void handleFrameChange();
     
@@ -80,11 +90,19 @@ public abstract class Screen implements EventProcessable {
         overlayGUI(mainImRepMatrix);
         return mainImRepMatrix;
     }
-
+    
     protected void sendFrameChangeEvery(long frameTime) {
         if (nanosSinceLastRender > frameTime) {
             handleFrameChange();
             nanosSinceLastRender = 0;
         }
+    }
+    
+    public void stepScreenBackwards() {
+        screenContext.stepScreenBackwards();
+    }
+
+    public void stepScreenForwards(Screen newScreen) {
+        screenContext.stepScreenForwards(newScreen);
     }
 }

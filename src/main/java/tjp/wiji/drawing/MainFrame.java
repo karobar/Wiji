@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import tjp.wiji.event.EventProcessor;
 import tjp.wiji.event.GameEvent;
 import tjp.wiji.gui.Screen;
+import tjp.wiji.gui.ScreenContext;
 import tjp.wiji.representations.ImageRepresentation;
 
 public abstract class MainFrame extends ApplicationAdapter
@@ -18,11 +19,7 @@ public abstract class MainFrame extends ApplicationAdapter
 
     private SpriteBatch batch;
     
-    private EventProcessor eventProcessor;
-    
-    private Screen grandparentScreen;
-    private Screen previousScreen;
-    private Screen currentScreen; 
+    private EventProcessor eventProcessor; 
     
     private Texture spriteSheet;
     private long startTime = 0;
@@ -30,6 +27,7 @@ public abstract class MainFrame extends ApplicationAdapter
     
     private BitmapContext bitmapContext;
     private ShaderContext shaderContext;
+    private ScreenContext screenContext;
     
     private final int widthInSlots, heightInSlots;
     
@@ -39,12 +37,15 @@ public abstract class MainFrame extends ApplicationAdapter
         this.bitmapContext = bitmapContext;
         this.widthInSlots = widthInSlots;
         this.heightInSlots = heightInSlots;
-        this.currentScreen = this.previousScreen = this.grandparentScreen = startingScreen;
+        
+        ScreenContext screenContext = startingScreen.getScreenContext();
+        this.screenContext = screenContext;
+        this.screenContext.init(startingScreen);
     }
     
     @Override
     public void create() {        
-        eventProcessor = new EventProcessor(currentScreen);
+        //eventProcessor = new EventProcessor(currentScreen);
         Gdx.input.setInputProcessor(this);
         
         batch = new SpriteBatch();
@@ -63,7 +64,7 @@ public abstract class MainFrame extends ApplicationAdapter
     protected abstract void createHook();
     
     public Screen getCurrentScreen() {
-        return this.currentScreen;
+        return screenContext.getCurrentScreen();
     }
     
     protected int getImageGridHeight() {
@@ -102,10 +103,10 @@ public abstract class MainFrame extends ApplicationAdapter
 
     @Override
     public void render () {
-        eventProcessor.processEventList(currentScreen);
+//        eventProcessor.processEventList(getCurrentScreen());
         
         timeSinceLastRender = System.nanoTime() - startTime;
-        ImageRepresentation[][] cellsToDraw = currentScreen.render(timeSinceLastRender/1000, 
+        ImageRepresentation[][] cellsToDraw = getCurrentScreen().render(timeSinceLastRender/1000, 
                 getImageGridWidth(), getImageGridHeight());
         timeSinceLastRender = 0;
         startTime = System.nanoTime();
@@ -171,25 +172,6 @@ public abstract class MainFrame extends ApplicationAdapter
     @Override
     public final boolean scrolled(int amount) {
         return false;
-    }
-
-    /**
-     * Used when exiting a screen to make sure that all pointers decrement by 
-     * one.
-     */
-    void stepScreenBackwards() {
-        currentScreen  = previousScreen;
-        previousScreen = grandparentScreen;
-    }
-
-    /**
-     * used when creating a new screen to make sure that the user can return to 
-     * the screen they were just at.
-     */
-    void stepScreenForwards(Screen newScreen) {
-        grandparentScreen = previousScreen;
-        previousScreen = currentScreen;
-        currentScreen = newScreen;
     }
 
     @Override
