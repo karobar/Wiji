@@ -10,12 +10,12 @@ import tjp.wiji.representations.ImageRepresentation;
  * @author      Travis Pressler (travisp471@gmail.com)
  * @version     %I%, %G%
  */
-public class ScreenTextCollection extends TextCollection {
+public class ScreenTextList extends TextList {
     private int screenX, screenY;
     private BitmapContext bitmapContext;
     private boolean centered = false;
     
-    public static class ScreenTextCollectionBuilder {
+    public static class ScreenTextListBuilder {
         private int x, y;
         private BitmapContext bitmapContext;
         private String initialItem;
@@ -25,42 +25,43 @@ public class ScreenTextCollection extends TextCollection {
         private boolean centered = false;
         //private CellDimensions dims;
         
-        public ScreenTextCollectionBuilder bitmapContext(BitmapContext bitmapContext) {
+        public ScreenTextListBuilder bitmapContext(BitmapContext bitmapContext) {
             this.bitmapContext = bitmapContext;
             return this;
         }
         
-        public ScreenTextCollectionBuilder x(int x) {
+        public ScreenTextListBuilder x(int x) {
             this.x = x;
             return this;
         }
         
-        public ScreenTextCollectionBuilder y(int y) {
+        public ScreenTextListBuilder y(int y) {
             this.y = y;
             return this;
         }
         
-        public ScreenTextCollectionBuilder inactiveColor(Color inactiveColor) {
+        public ScreenTextListBuilder inactiveColor(Color inactiveColor) {
             this.inactiveColor = inactiveColor;
             return this;
         }
         
-        public ScreenTextCollectionBuilder activeColor(Color activeColor) {
+        public ScreenTextListBuilder activeColor(Color activeColor) {
             this.activeColor = activeColor;
             return this;
         }
         
-        public ScreenTextCollectionBuilder color(Color color) {
-            this.inactiveColor = this.activeColor = color;
+        public ScreenTextListBuilder color(Color color) {
+            this.inactiveColor = color;
+            this.activeColor = color;
             return this;
         }
         
-        public ScreenTextCollectionBuilder initialItem(String initialItem) {
+        public ScreenTextListBuilder initialItem(String initialItem) {
             this.initialItem = initialItem;
             return this;
         }
         
-        public ScreenTextCollectionBuilder centered() {
+        public ScreenTextListBuilder centered() {
             this.centered = true;
             return this;
         }
@@ -70,15 +71,26 @@ public class ScreenTextCollection extends TextCollection {
          * are provided in full.
          * @return
          */
-        public ScreenTextCollection build() {
-            return new ScreenTextCollection(this);
+        public ScreenTextList build() {
+            return new ScreenTextList(this);
         }
     }
     
-    private ScreenTextCollection(ScreenTextCollectionBuilder builder) {
+    private ScreenTextList(ScreenTextListBuilder builder) {
         this.bitmapContext = builder.bitmapContext;
-        this.activeColor = builder.activeColor;
-        this.inactiveColor = builder.inactiveColor;
+        
+        
+        
+        if (builder.activeColor == null) {
+            this.activeColor = GUIelement.DEFAULT_ACTIVE_COLOR;
+        } else {
+            this.activeColor = builder.activeColor;
+        }
+        if (builder.inactiveColor == null) {
+            this.inactiveColor = GUIelement.DEFAULT_INACTIVE_COLOR;
+        } else {
+            this.inactiveColor = builder.inactiveColor;
+        }
         
         this.screenX = builder.x;
         this.screenY = builder.y;
@@ -86,12 +98,12 @@ public class ScreenTextCollection extends TextCollection {
         this.centered = builder.centered;
         
         if (builder.initialItem != null) {
-            add(new GUIText(builder.initialItem));
+            add(new GUItext(builder.initialItem, activeColor, inactiveColor));
         }
     }
     
-    public static ScreenTextCollectionBuilder newBuilder() {
-        return new ScreenTextCollectionBuilder();
+    public static ScreenTextListBuilder newBuilder() {
+        return new ScreenTextListBuilder();
     }
     
     /**
@@ -103,7 +115,7 @@ public class ScreenTextCollection extends TextCollection {
       * @param y position of upper-left corner of the list (assuming 
       *        position is not explicitly assigned with GUIText.specY)
     */
-    public ScreenTextCollection(BitmapContext bitmapContext, Color inInactive, int x, int y) {
+    public ScreenTextList(BitmapContext bitmapContext, Color inInactive, int x, int y) {
         this.bitmapContext = bitmapContext;
         this.inactiveColor = inInactive;
         this.activeColor = null;
@@ -121,7 +133,7 @@ public class ScreenTextCollection extends TextCollection {
      * @param y position of upper-left corner of the list (assuming 
      *        position is not explicitly assigned with GUIText.specY)
    */
-   public ScreenTextCollection(BitmapContext bitmapContext,
+   public ScreenTextList(BitmapContext bitmapContext,
            Color inInactive, String initialItem, int x, int y) {
 
        this.bitmapContext = bitmapContext;
@@ -129,7 +141,7 @@ public class ScreenTextCollection extends TextCollection {
        this.activeColor = null;
        this.screenX = x;
        this.screenY = y;
-       this.add(new GUIText(initialItem));
+       this.add(new GUItext(initialItem));
    }
    
    /**
@@ -142,7 +154,7 @@ public class ScreenTextCollection extends TextCollection {
     * @param y position of upper-left corner of the list (assuming 
     *        position is not explicitly assigned with GUIText.specY)
   */
-  public ScreenTextCollection(BitmapContext bitmapContext, CellDimensions dimension,
+  public ScreenTextList(BitmapContext bitmapContext, CellDimensions dimension,
           Color inInactive, String initialItem, int x, int y) {
 
       this.bitmapContext = bitmapContext;
@@ -150,7 +162,7 @@ public class ScreenTextCollection extends TextCollection {
       this.activeColor = null;
       this.screenX = x;
       this.screenY = y;
-      this.add(new GUIText(initialItem));
+      this.add(new GUItext(initialItem));
   }
 
      /**
@@ -162,7 +174,7 @@ public class ScreenTextCollection extends TextCollection {
       * @param y position of upper-left corner of the list (assuming 
       *        position is not explicitly assigned with GUIText.specY)
     */
-    public ScreenTextCollection(final BitmapContext bitmapContext, Color inInactive, Color inputActive, 
+    public ScreenTextList(final BitmapContext bitmapContext, Color inInactive, Color inputActive, 
             int x, int y){
 
         this.bitmapContext = bitmapContext;
@@ -178,7 +190,7 @@ public class ScreenTextCollection extends TextCollection {
      * @param inInactive color of the text
      * @param inputActive color of the text when active
    */
-   public ScreenTextCollection(final BitmapContext bitmapContext, 
+   public ScreenTextList(final BitmapContext bitmapContext, 
            Color inInactive, Color inputActive){
 
        this.bitmapContext = bitmapContext;

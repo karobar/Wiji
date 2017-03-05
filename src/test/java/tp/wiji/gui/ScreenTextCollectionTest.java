@@ -10,14 +10,14 @@ import static org.mockito.Mockito.mock;
 
 import tjp.wiji.drawing.BitmapContext;
 import tjp.wiji.drawing.Color;
-import tjp.wiji.gui.ScreenTextCollection;
+import tjp.wiji.gui.ScreenTextList;
 
 @RunWith(JukitoRunner.class)
 public class ScreenTextCollectionTest {
     // Integration
     @Test
     public void testBuilder() {
-        ScreenTextCollection dut = ScreenTextCollection.newBuilder()
+        ScreenTextList dut = ScreenTextList.newBuilder()
                 .bitmapContext(mock(BitmapContext.class))
                 .color(Color.RED)
                 .initialItem(" SUS ")
@@ -31,7 +31,7 @@ public class ScreenTextCollectionTest {
     // Integration
     @Test
     public void testBuilderChoiceList() {
-        ScreenTextCollection dut = ScreenTextCollection.newBuilder()
+        ScreenTextList dut = ScreenTextList.newBuilder()
                 .bitmapContext(mock(BitmapContext.class))
                 .inactiveColor(Color.BLACK)
                 .activeColor(Color.BLUE)

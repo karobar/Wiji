@@ -7,12 +7,9 @@ import tjp.wiji.drawing.Color;
 import tjp.wiji.representations.ImageRepresentation;
 import tjp.wiji.representations.LetterRepresentation;
 
-public abstract class TextCollection {
-    private final List<GUIText> textCollection = new ArrayList<GUIText>();
-    
-    public final static Color DEFAULT_INACTIVE_COLOR = Color.WHITE;
-    public final static Color DEFAULT_ACTIVE_COLOR   = Color.YELLOW;
-    public final static Color DEFAULT_ANCILLARY_TEXT_COLOR = Color.GRAY;
+public abstract class TextList {
+    private final List<GUIelement> textList = new ArrayList<GUIelement>();
+
     Color inactiveColor = Color.WHITE;
     Color activeColor = Color.WHITE;
 
@@ -28,8 +25,8 @@ public abstract class TextCollection {
      * @param textString the textString to be displayed
      * @param obj the object corresponding to the textString.
      */
-    public boolean add(GUIText text) {
-        return textCollection.add(text);
+    public boolean add(GUIelement text) {
+        return textList.add(text);
     }
     
     /**
@@ -38,25 +35,25 @@ public abstract class TextCollection {
      * @return the width of the GUI item
     */
     public int getWidth() {
-        int max = textCollection.get(0).getName().length();
-        for(int i = 0; i < textCollection.size(); i++) {
-            if (textCollection.get(i).getName().length() > max) {
-                max = textCollection.get(i).getName().length();
+        int max = textList.get(0).getLength();
+        for(int i = 0; i < textList.size(); i++) {
+            if (textList.get(i).getLength() > max) {
+                max = textList.get(i).getLength();
             }
         }
         return max;
     }
     
     public int getHeight() {
-        return textCollection.size();
+        return textList.size();
     }
     
-    public String getCurrentChoiceName() {
-        return textCollection.get(currentChoiceIndex).getName();
-    }
+//    public String getCurrentChoiceName() {
+//        return textList.get(currentChoiceIndex).getName();
+//    }
     
-    public GUIText getCurrentChoice() {
-        return textCollection.get(currentChoiceIndex);
+    public GUIelement getCurrentChoice() {
+        return textList.get(currentChoiceIndex);
     }
     
     Color getInactiveColor() {
@@ -83,14 +80,14 @@ public abstract class TextCollection {
             currentChoiceIndex = currentChoiceIndex - 1;
         }
         else if (currentChoiceIndex == 0){
-            currentChoiceIndex = textCollection.size()-1;
+            currentChoiceIndex = textList.size()-1;
         }
         else{
             System.out.println(
                     "yo, cycleActiveUp in ChoiceList is bein' wierd");
         }
         
-        if(textCollection.get(currentChoiceIndex) instanceof AncillaryGUIText) {
+        if(textList.get(currentChoiceIndex) instanceof AncillaryGUIText) {
             cycleUp();
         }
     }
@@ -99,8 +96,8 @@ public abstract class TextCollection {
      * Moves the current choice index down (or right), wraps around.
      */
     public void cycleDown() {
-        currentChoiceIndex = (currentChoiceIndex + 1) % textCollection.size();
-        if(textCollection.get(currentChoiceIndex) instanceof AncillaryGUIText) {
+        currentChoiceIndex = (currentChoiceIndex + 1) % textList.size();
+        if(textList.get(currentChoiceIndex) instanceof AncillaryGUIText) {
             cycleDown();
         }
     }
@@ -135,29 +132,25 @@ public abstract class TextCollection {
      */
     public void displayOnto(ImageRepresentation[][] displayArea, BitmapContext bitmapContext) {
         int currentY = getScreenY();
-        //cycle through all the GUIText elements
-        for(int i = 0; i < textCollection.size(); i++){
-            GUIText currText = textCollection.get(i);
-            //turns the choice's textString into an array of ints
-            String choiceName = currText.getName();
+        //cycle through all the GUI elements
+        for(int i = 0; i < textList.size(); i++){
+            GUIelement currElement = textList.get(i);
             
             int currentX;
             if (this.isCentered()) {
-                currentX = findCenterPoint(displayArea.length, choiceName.length()); 
+                currentX = findCenterPoint(displayArea.length, currElement.getLength()); 
             } else {
                 currentX = getScreenX();
             }
-
-            //loop over all the integers (representing chars)
-            for(int j = 0; j < choiceName.length() ;j++){
-                char currentLetter = choiceName.charAt(j);
-                ImageRepresentation currentImg = determineCurrImg(currText, currentLetter,
-                        bitmapContext, i);
+            for(int j = 0; j < currElement.getLength() ;j++){
+                boolean isActive = (i == currentChoiceIndex);
+                ImageRepresentation currentImg = currElement.determineCurrImg(bitmapContext, j, 
+                        isActive);
                 
-                int x = (currText.customX >= 0) ? currText.customX + j :  currentX;
-                int y = (currText.customY >= 0) ? currText.customY : currentY;
-                if (x < displayArea.length && x > 0 &&
-                    y < displayArea[0].length && y > 0) {
+                int x = (currElement.customX >= 0) ? currElement.customX + j :  currentX;
+                int y = (currElement.customY >= 0) ? currElement.customY : currentY;
+                if (x < displayArea.length && x >= 0 &&
+                    y < displayArea[0].length && y >= 0) {
 
                     displayArea[x][y] = currentImg;
                 }
@@ -165,32 +158,5 @@ public abstract class TextCollection {
             }
             currentY++;
         }        
-    }
-    
-    private ImageRepresentation determineCurrImg(GUIText currText, char currentLetter,
-            BitmapContext bitmapContext, int currIndex) {
- 
-        if(currText instanceof AncillaryGUIText) {
-            return new LetterRepresentation(
-                    DEFAULT_ANCILLARY_TEXT_COLOR, 
-                    Color.BLACK, 
-                    currentLetter,
-                    bitmapContext.getCharPixelWidth(),
-                    bitmapContext.getCharPixelHeight());
-        } else if((currIndex == currentChoiceIndex) && activeColor != null){
-            return new LetterRepresentation(
-                    this.getActiveColor(), 
-                    Color.BLACK, 
-                    currentLetter,
-                    bitmapContext.getCharPixelWidth(),
-                    bitmapContext.getCharPixelHeight());
-        } else {
-            return new LetterRepresentation(
-                    this.getInactiveColor(), 
-                    Color.BLACK,
-                    currentLetter,
-                    bitmapContext.getCharPixelWidth(),
-                    bitmapContext.getCharPixelHeight());
-        }
     }
 }
