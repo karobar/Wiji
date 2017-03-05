@@ -1,5 +1,7 @@
 package tjp.wiji.gui;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import tjp.wiji.drawing.BitmapContext;
 import tjp.wiji.drawing.Color;
 import tjp.wiji.representations.ImageRepresentation;
@@ -17,11 +19,30 @@ import tjp.wiji.representations.LetterRepresentation;
 public class GUItext extends GUIelement {
     int[] textCodes;
     String textString;
-    /** If a GUIText element is a BGthief, it will steal the color from the
-      *element underneath. */
-    public boolean BGthief = false;
     
-    public GUItext() {}
+    public char charAt(int index) {
+        return textString.charAt(index);
+    }
+
+    public String concat(String str) {
+        String newString = textString.concat(str);
+        textString = newString;
+        return newString;
+    }
+
+    public boolean isEmpty() {
+        return textString.isEmpty();
+    }
+    
+    public void removeLastChar() {
+        textString = textString.substring(0, textString.length() - 1); 
+    }
+
+    /** 
+     * If a GUIText element is a BGthief, it will steal the color from the
+     * element underneath. 
+     */
+    public boolean BGthief = false;
     
     /**
      * Basic constructor for a textString item.
@@ -29,18 +50,15 @@ public class GUItext extends GUIelement {
      */
     public GUItext(String text) {
         this.textString = text;
-        this.activeColor = DEFAULT_ACTIVE_COLOR;
-        this.inactiveColor = DEFAULT_INACTIVE_COLOR;
         //textCodes = Translator.translate(text);
     }
     
     public GUItext(String text, Color activeColor, Color inactiveColor) {
         this.textString = text;
-        this.activeColor = inactiveColor;
-        this.inactiveColor = activeColor;
+        setInactiveColor(checkNotNull(inactiveColor));
+        setActiveColor(checkNotNull(activeColor));
         //textCodes = Translator.translate(text);
-    }
-    
+    } 
     
     /**
      * Constructor for a textString item with a specified position
@@ -78,7 +96,7 @@ public class GUItext extends GUIelement {
     public ImageRepresentation determineCurrImg(BitmapContext bitmapContext, 
             int currIndex, boolean isActive) {
  
-        if (isActive && activeColor != null){
+        if (isActive){
             return new LetterRepresentation(
                     this.getActiveColor(), 
                     Color.BLACK, 

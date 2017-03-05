@@ -87,7 +87,7 @@ public abstract class TextList {
                     "yo, cycleActiveUp in ChoiceList is bein' wierd");
         }
         
-        if(textList.get(currentChoiceIndex) instanceof AncillaryGUIText) {
+        if(textList.get(currentChoiceIndex) instanceof AncillaryGUItext) {
             cycleUp();
         }
     }
@@ -97,7 +97,7 @@ public abstract class TextList {
      */
     public void cycleDown() {
         currentChoiceIndex = (currentChoiceIndex + 1) % textList.size();
-        if(textList.get(currentChoiceIndex) instanceof AncillaryGUIText) {
+        if(textList.get(currentChoiceIndex) instanceof AncillaryGUItext) {
             cycleDown();
         }
     }

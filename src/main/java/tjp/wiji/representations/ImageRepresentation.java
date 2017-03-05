@@ -1,5 +1,7 @@
 package tjp.wiji.representations;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import tjp.wiji.drawing.Color;
 
 /**
@@ -27,9 +29,9 @@ public abstract class ImageRepresentation {
     protected ImageRepresentation(final Color foreColor, final int rawImgChar, 
             final int charPixelWidth, final int charPixelHeight) {
 
-        this.foreColor = foreColor;
+        this.foreColor = checkNotNull(foreColor);
         this.backColor = Color.BLACK;
-        this.rawImgChar = rawImgChar;
+        this.rawImgChar = checkNotNull(rawImgChar);
         this.RGBMatrix = new int[charPixelWidth][charPixelHeight];
     }
     
@@ -43,9 +45,9 @@ public abstract class ImageRepresentation {
     protected ImageRepresentation(Color foreColor, Color backColor, int rawImgChar, 
             final int charPixelWidth, final int charPixelHeight) {
 
-        this.foreColor = foreColor;
-        this.backColor = backColor;
-        this.rawImgChar = rawImgChar;
+        this.foreColor = checkNotNull(foreColor);
+        this.backColor = checkNotNull(backColor);
+        this.rawImgChar = checkNotNull(rawImgChar);
         this.RGBMatrix = new int[charPixelWidth][charPixelHeight];
     }
 
@@ -58,7 +60,7 @@ public abstract class ImageRepresentation {
 
         this.foreColor = Color.WHITE;
         this.backColor = Color.BLACK;
-        this.rawImgChar = rawImgChar;
+        this.rawImgChar = checkNotNull(rawImgChar);
         this.RGBMatrix = new int[charPixelWidth][charPixelHeight];
     }
     
@@ -75,6 +77,6 @@ public abstract class ImageRepresentation {
     }
     
     public void setBackColor(Color newBackColor) {
-        this.backColor = newBackColor;
+        this.backColor = checkNotNull(newBackColor);
     }
 }

@@ -1,6 +1,12 @@
 package tjp.wiji.drawing;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.net.URISyntaxException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -30,6 +36,7 @@ public abstract class MainFrame extends ApplicationAdapter
     private ScreenContext screenContext;
     
     private final int widthInSlots, heightInSlots;
+    private final static Logger logger = LoggerFactory.getLogger(MainFrame.class);
     
     public MainFrame(final BitmapContext bitmapContext,
             final int widthInSlots, final int heightInSlots, final Screen startingScreen) {
@@ -82,7 +89,8 @@ public abstract class MainFrame extends ApplicationAdapter
     }
 
     @Override
-    public final  boolean keyTyped(char character) {
+    public final boolean keyTyped(char character) {
+        getCurrentScreen().handleEvent(new GameEvent(character));
         return false;
     }
 
@@ -137,7 +145,10 @@ public abstract class MainFrame extends ApplicationAdapter
     
     private void drawBatch(int row, int col, int pixelWidth, int pixelHeight, 
             ImageRepresentation currCell) {
-
+        
+        checkNotNull(currCell);
+        checkNotNull(currCell.getBackColor());
+        checkNotNull(currCell.getForeColor());
         configureShaderForCell(currCell.getBackColor(), currCell.getForeColor());
         
         int graphicIndex = currCell.getImgChar();

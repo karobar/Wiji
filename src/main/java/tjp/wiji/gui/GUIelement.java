@@ -1,5 +1,7 @@
 package tjp.wiji.gui;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import tjp.wiji.drawing.BitmapContext;
 import tjp.wiji.drawing.Color;
 import tjp.wiji.representations.ImageRepresentation;
@@ -16,7 +18,8 @@ public abstract class GUIelement {
     public int customX = -1;
     public int customY = -1;
     
-    public Color activeColor, inactiveColor;
+    private Color activeColor = DEFAULT_ACTIVE_COLOR;
+    private Color inactiveColor = DEFAULT_INACTIVE_COLOR;
     
     public Color getActiveColor() {
         return activeColor;
@@ -24,5 +27,13 @@ public abstract class GUIelement {
     
     public Color getInactiveColor() {
         return inactiveColor;
+    }
+    
+    public void setActiveColor(Color activeColor) {
+        this.activeColor = checkNotNull(activeColor);
+    }
+    
+    public void setInactiveColor(Color inactiveColor) {
+        this.inactiveColor = checkNotNull(inactiveColor);
     }
 }
