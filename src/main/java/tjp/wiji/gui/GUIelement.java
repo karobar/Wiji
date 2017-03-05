@@ -13,27 +13,29 @@ public abstract class GUIelement {
     protected final static Color DEFAULT_ACTIVE_COLOR   = Color.YELLOW;
     
     public abstract ImageRepresentation determineCurrImg(BitmapContext bitmapContext,
-            int currIndex, boolean isActive);
+            int currIndex, boolean isActive, Color parentActiveColor, Color parentInactiveColor);
     
     public int customX = -1;
     public int customY = -1;
     
-    private Color activeColor = DEFAULT_ACTIVE_COLOR;
-    private Color inactiveColor = DEFAULT_INACTIVE_COLOR;
+    private Color customActiveColor;
+    private Color customInactiveColor;
     
-    public Color getActiveColor() {
-        return activeColor;
+    public Color getCustomActiveColor() {
+        return customActiveColor;
     }
     
-    public Color getInactiveColor() {
-        return inactiveColor;
+    public Color getCustomInactiveColor() {
+        return customInactiveColor;
     }
     
-    public void setActiveColor(Color activeColor) {
-        this.activeColor = checkNotNull(activeColor);
+    public void setCustomActiveColor(Color activeColor) {
+        this.customActiveColor = checkNotNull(activeColor);
     }
     
-    public void setInactiveColor(Color inactiveColor) {
-        this.inactiveColor = checkNotNull(inactiveColor);
+    public void setCustomInactiveColor(Color inactiveColor) {
+        this.customInactiveColor = checkNotNull(inactiveColor);
     }
+    
+    public abstract boolean isAncillary();
 }

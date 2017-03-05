@@ -16,6 +16,7 @@ public class ScreenContext {
     public void stepScreenBackwards() {
         currentScreen  = previousScreen;
         previousScreen = grandparentScreen;
+        currentScreen.stepToScreenTrigger();
     }
 
     /**
@@ -26,6 +27,7 @@ public class ScreenContext {
         grandparentScreen = previousScreen;
         previousScreen = currentScreen;
         currentScreen = newScreen;
+        currentScreen.stepToScreenTrigger();
     }
     
     public Screen getCurrentScreen() {

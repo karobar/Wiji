@@ -18,8 +18,8 @@ public class InputField extends GUIelement {
             int emptyLength, int maximumLength) {
 
         this.inProgressText = new GUItext("");
-        setInactiveColor(checkNotNull(inactiveColor));
-        setActiveColor(checkNotNull(activeColor));
+        setCustomInactiveColor(checkNotNull(inactiveColor));
+        setCustomActiveColor(checkNotNull(activeColor));
         this.emptyLength = emptyLength;
         this.maximumLength = maximumLength;
     }
@@ -27,14 +27,19 @@ public class InputField extends GUIelement {
     public void push(char newChar) {
         if (inProgressText.getLength() <= maximumLength) {
             inProgressText.concat(Character.toString(newChar));
-            System.out.println(inProgressText.getName());
+            System.out.println(inProgressText.toString());
         }
+    }
+    
+    @Override
+    public String toString() {
+        return inProgressText.toString();
     }
     
     public void pop() {
         if (!isEmpty()) {
             inProgressText.removeLastChar();
-            System.out.println(inProgressText.getName());
+            System.out.println(inProgressText.toString());
         }
     }
     
@@ -44,7 +49,7 @@ public class InputField extends GUIelement {
     
     @Override
     public ImageRepresentation determineCurrImg(BitmapContext bitmapContext, 
-            int currIndex, boolean isActive) {
+            int currIndex, boolean isActive, Color parentActiveColor, Color parentInactiveColor) {
         
         checkNotNull(bitmapContext);
         
@@ -60,15 +65,15 @@ public class InputField extends GUIelement {
         
         if (isActive){
             return new LetterRepresentation(
-                    this.getActiveColor(), 
+                    this.getCustomActiveColor(), 
                     Color.BLACK, 
                     inProgressText.charAt(currIndex),
                     bitmapContext.getCharPixelWidth(),
                     bitmapContext.getCharPixelHeight());
         } else {
-            checkNotNull(this.getInactiveColor());
+            checkNotNull(this.getCustomInactiveColor());
             return new LetterRepresentation(
-                    this.getInactiveColor(), 
+                    this.getCustomInactiveColor(), 
                     Color.BLACK,
                     inProgressText.charAt(currIndex),
                     bitmapContext.getCharPixelWidth(),
@@ -79,15 +84,15 @@ public class InputField extends GUIelement {
     private ImageRepresentation handleEmpty(BitmapContext bitmapContext, boolean isActive) {
         if (isActive){
             return new GraphicRepresentation(
-                    this.getActiveColor(), 
+                    this.getCustomActiveColor(), 
                     Color.BLACK, 
                     Graphic.FILLED_CELL,
                     bitmapContext.getCharPixelWidth(),
                     bitmapContext.getCharPixelHeight());
         } else {
-            checkNotNull(this.getInactiveColor());
+            checkNotNull(this.getCustomInactiveColor());
             return new GraphicRepresentation(
-                    this.getInactiveColor(), 
+                    this.getCustomInactiveColor(), 
                     Color.BLACK,
                     Graphic.FILLED_CELL,
                     bitmapContext.getCharPixelWidth(),
@@ -102,5 +107,10 @@ public class InputField extends GUIelement {
         } else {
             return inProgressText.getLength();
         }
+    }
+
+    @Override
+    public boolean isAncillary() {
+        return false;
     }
 }

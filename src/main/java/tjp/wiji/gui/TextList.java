@@ -11,7 +11,7 @@ public abstract class TextList {
     private final List<GUIelement> textList = new ArrayList<GUIelement>();
 
     Color inactiveColor = Color.WHITE;
-    Color activeColor = Color.WHITE;
+    Color activeColor = Color.YELLOW;
 
     int currentChoiceIndex = 0;
 
@@ -82,12 +82,10 @@ public abstract class TextList {
         else if (currentChoiceIndex == 0){
             currentChoiceIndex = textList.size()-1;
         }
-        else{
-            System.out.println(
-                    "yo, cycleActiveUp in ChoiceList is bein' wierd");
-        }
-        
-        if(textList.get(currentChoiceIndex) instanceof AncillaryGUItext) {
+        else {
+            System.out.println("yo, cycleActiveUp in ChoiceList is bein' wierd");
+        }     
+        if (textList.get(currentChoiceIndex).isAncillary()) {
             cycleUp();
         }
     }
@@ -97,7 +95,7 @@ public abstract class TextList {
      */
     public void cycleDown() {
         currentChoiceIndex = (currentChoiceIndex + 1) % textList.size();
-        if(textList.get(currentChoiceIndex) instanceof AncillaryGUItext) {
+        if (textList.get(currentChoiceIndex).isAncillary()) {
             cycleDown();
         }
     }
@@ -145,7 +143,7 @@ public abstract class TextList {
             for(int j = 0; j < currElement.getLength() ;j++){
                 boolean isActive = (i == currentChoiceIndex);
                 ImageRepresentation currentImg = currElement.determineCurrImg(bitmapContext, j, 
-                        isActive);
+                        isActive, getActiveColor(), getInactiveColor());
                 
                 int x = (currElement.customX >= 0) ? currElement.customX + j :  currentX;
                 int y = (currElement.customY >= 0) ? currElement.customY : currentY;

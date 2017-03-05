@@ -17,33 +17,18 @@ import tjp.wiji.representations.LetterRepresentation;
  * @version     %I%, %G%
  */
 public class GUItext extends GUIelement {
-    int[] textCodes;
-    String textString;
-    
-    public char charAt(int index) {
-        return textString.charAt(index);
-    }
-
-    public String concat(String str) {
-        String newString = textString.concat(str);
-        textString = newString;
-        return newString;
-    }
-
-    public boolean isEmpty() {
-        return textString.isEmpty();
-    }
-    
-    public void removeLastChar() {
-        textString = textString.substring(0, textString.length() - 1); 
-    }
-
+    public final static Color DEFAULT_ANCILLARY_TEXT_COLOR = Color.GRAY;
     /** 
      * If a GUIText element is a BGthief, it will steal the color from the
      * element underneath. 
      */
     public boolean BGthief = false;
+    private boolean isAncillary;
     
+    int[] textCodes;
+
+    String textString;
+
     /**
      * Basic constructor for a textString item.
      * @param inName the textString to be displayed
@@ -53,12 +38,32 @@ public class GUItext extends GUIelement {
         //textCodes = Translator.translate(text);
     }
     
+    /**
+     * Basic constructor for an ancillary text item.
+     * @param inName the textString to be displayed
+     */
+    public GUItext(String text, boolean isAncillary) {
+        this.textString = text;
+        this.isAncillary = true;
+    }
+
+    /**
+     * Basic constructor for an ancillary text item with a color.
+     * @param inName the textString to be displayed
+     */
+    public GUItext(String text, Color color, boolean isAncillary) {
+        this.textString = text;
+        setCustomInactiveColor(checkNotNull(color));
+        setCustomActiveColor(checkNotNull(color));
+        this.isAncillary = true;
+    }
+    
     public GUItext(String text, Color activeColor, Color inactiveColor) {
         this.textString = text;
-        setInactiveColor(checkNotNull(inactiveColor));
-        setActiveColor(checkNotNull(activeColor));
+        setCustomInactiveColor(checkNotNull(inactiveColor));
+        setCustomActiveColor(checkNotNull(activeColor));
         //textCodes = Translator.translate(text);
-    } 
+    }
     
     /**
      * Constructor for a textString item with a specified position
@@ -74,43 +79,102 @@ public class GUItext extends GUIelement {
     }
     
     /**
-     * This is dangerous.  If the GUIText is initialized with integers rather 
-     * than with strings, there may be unprintable characters. 
-     * @return 
+     * Constructor for a textString item with a specified position and is ancillary
+     * @param inName the textString to be displayed
+     * @param inSpecX the x position of the textString item
+     * @param inSpecY the y position of the textString item
      */
-    public String getName(){
-        if(this.textString != null) {
-            return this.textString;
-        }
-        else {
-            return "!ERROR!";
-        }
+    public GUItext(String text, int specX, int specY, boolean isAncillary) {
+        this.textString = text;
+        this.customX = specX;
+        this.customY = specY;
+        this.isAncillary = true;
     }
-
-    @Override
-    public int getLength() {
-        return this.textString.length();
+    
+    public char charAt(int index) {
+        return textString.charAt(index);
+    }
+    
+    public String concat(String str) {
+        String newString = textString.concat(str);
+        textString = newString;
+        return newString;
     }
     
     @Override
     public ImageRepresentation determineCurrImg(BitmapContext bitmapContext, 
-            int currIndex, boolean isActive) {
+            int currIndex, boolean isActive, Color parentActiveColor, Color parentInactiveColor) {
  
         if (isActive){
             return new LetterRepresentation(
-                    this.getActiveColor(), 
+                    getFinalActiveColor(parentActiveColor), 
                     Color.BLACK, 
-                    getName().charAt(currIndex),
+                    toString().charAt(currIndex),
                     bitmapContext.getCharPixelWidth(),
                     bitmapContext.getCharPixelHeight());
         } else {
             return new LetterRepresentation(
-                    this.getInactiveColor(), 
+                    getFinalInactiveColor(parentInactiveColor), 
                     Color.BLACK,
-                    getName().charAt(currIndex),
+                    toString().charAt(currIndex),
                     bitmapContext.getCharPixelWidth(),
                     bitmapContext.getCharPixelHeight());
         }
+    }
+    
+    private Color getFinalActiveColor(Color parentActiveColor) {
+        if (getCustomActiveColor() != null) {
+            return getCustomActiveColor();
+        } else if (isAncillary) {
+            return DEFAULT_ANCILLARY_TEXT_COLOR;
+        } else if (parentActiveColor != null){
+            return parentActiveColor;
+        } else {
+            return DEFAULT_ACTIVE_COLOR;
+        }
+    }
+    
+    private Color getFinalInactiveColor(Color parentInactiveColor) {
+        if (getCustomInactiveColor() != null) {
+            return getCustomInactiveColor();
+        } else if (isAncillary) {
+            return DEFAULT_ANCILLARY_TEXT_COLOR;
+        } else if (parentInactiveColor != null){
+            return parentInactiveColor;
+        } else {
+            return DEFAULT_INACTIVE_COLOR;
+        }
+    }
+    
+    @Override
+    public int getLength() {
+        return this.textString.length();
+    } 
+    
+    @Override
+    public boolean isAncillary() {
+        return isAncillary;
+    }
+    
+    public void setIsAncillary(boolean isAncillary) {
+        this.isAncillary = isAncillary;
+    }
+//    
+//    public void setNormal() {
+//        this.isAncillary = false;
+//    }
+    
+    public boolean isEmpty() {
+        return textString.isEmpty();
+    }
+
+    public void removeLastChar() {
+        textString = textString.substring(0, textString.length() - 1); 
+    }
+    
+    @Override
+    public String toString(){
+        return this.textString;
     }
     
 //    public int[] getTextCodes() {
