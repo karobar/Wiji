@@ -51,7 +51,7 @@ public class ScreenTextCollection extends TextCollection {
         }
         
         public ScreenTextCollectionBuilder color(Color color) {
-            this.activeColor = color;
+            this.inactiveColor = this.activeColor = color;
             return this;
         }
         

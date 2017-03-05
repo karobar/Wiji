@@ -153,9 +153,14 @@ public abstract class TextCollection {
                 char currentLetter = choiceName.charAt(j);
                 ImageRepresentation currentImg = determineCurrImg(currText, currentLetter,
                         bitmapContext, i);
-                  
-                displayArea[(currText.customX >= 0) ? currText.customX + j :  currentX]
-                           [(currText.customY >= 0) ? currText.customY : currentY] = currentImg;
+                
+                int x = (currText.customX >= 0) ? currText.customX + j :  currentX;
+                int y = (currText.customY >= 0) ? currText.customY : currentY;
+                if (x < displayArea.length && x > 0 &&
+                    y < displayArea[0].length && y > 0) {
+
+                    displayArea[x][y] = currentImg;
+                }
                 currentX++;
             }
             currentY++;
