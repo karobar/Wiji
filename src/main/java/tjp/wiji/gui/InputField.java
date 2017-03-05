@@ -27,7 +27,6 @@ public class InputField extends GUIelement {
     public void push(char newChar) {
         if (inProgressText.getLength() <= maximumLength) {
             inProgressText.concat(Character.toString(newChar));
-            System.out.println(inProgressText.toString());
         }
     }
     
@@ -39,7 +38,6 @@ public class InputField extends GUIelement {
     public void pop() {
         if (!isEmpty()) {
             inProgressText.removeLastChar();
-            System.out.println(inProgressText.toString());
         }
     }
     

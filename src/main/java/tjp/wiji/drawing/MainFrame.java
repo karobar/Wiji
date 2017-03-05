@@ -107,7 +107,12 @@ public abstract class MainFrame extends ApplicationAdapter
     @Override
     public void dispose() {
         batch.dispose();
+        shaderContext.getShader().dispose();
+        disposeHook();
+        System.exit(0);
     }
+    
+    protected abstract void disposeHook();
 
     @Override
     public void render () {
