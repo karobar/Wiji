@@ -39,15 +39,11 @@ public abstract class MainFrame extends ApplicationAdapter
     private final static Logger logger = LoggerFactory.getLogger(MainFrame.class);
     
     public MainFrame(final BitmapContext bitmapContext,
-            final int widthInSlots, final int heightInSlots, final Screen startingScreen) {
+            final int widthInSlots, final int heightInSlots) {
 
         this.bitmapContext = bitmapContext;
         this.widthInSlots = widthInSlots;
         this.heightInSlots = heightInSlots;
-        
-        ScreenContext screenContext = startingScreen.getScreenContext();
-        this.screenContext = screenContext;
-        this.screenContext.init(startingScreen);
     }
     
     @Override
@@ -65,10 +61,14 @@ public abstract class MainFrame extends ApplicationAdapter
             Gdx.app.error("ERROR", "my error message", e);
             System.exit(0);
         }
-        createHook();
+        this.screenContext = createStartingScreenContext();
     }
     
-    protected abstract void createHook();
+    protected abstract ScreenContext createStartingScreenContext();
+    
+    protected BitmapContext getBitmapContext() {
+        return bitmapContext;
+    }
     
     public Screen getCurrentScreen() {
         return screenContext.getCurrentScreen();

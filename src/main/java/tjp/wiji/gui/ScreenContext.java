@@ -1,5 +1,9 @@
 package tjp.wiji.gui;
 
+/**
+ * A bag of screens
+ * @author travis
+ */
 public class ScreenContext {
     private Screen grandparentScreen;
     private Screen previousScreen;
@@ -7,6 +11,7 @@ public class ScreenContext {
     
     public void init(Screen startingScreen) {
         this.currentScreen = this.previousScreen = this.grandparentScreen = startingScreen;
+        this.currentScreen.stepToScreenTrigger();
     }
     
     /**
