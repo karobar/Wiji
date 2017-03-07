@@ -101,6 +101,36 @@ public class GUItext extends GUIelement {
         return newString;
     }
     
+    public void insertChar(char insertChar, int index) {
+        if (index >= 0 && index < textString.length()) {
+            String leftPart = textString.substring(0, index);
+            String rightPart = textString.substring(index);
+            textString = leftPart + insertChar + rightPart;
+        }
+    }
+    
+    public void removeAll(char ch) {
+        textString = removeAlls(ch, textString);
+    }
+    
+    private String removeAlls(char ch, String str) {
+        for(int i = 0; i < str.length(); i++) {
+            boolean found = str.charAt(i) == ch;
+            if(found && i == str.length() - 1) {
+                return "";
+            } else if(found) {
+                return str.substring(0, i) + removeAlls(ch, str.substring(i + 1));
+            }
+        }
+        return str;
+    }
+    
+    public String concatLeft(String str) {
+        String newString = str.concat(textString);
+        textString = newString;
+        return newString;
+    }
+    
     @Override
     public ImageRepresentation determineCurrImg(BitmapContext bitmapContext, 
             int currIndex, boolean isActive, Color parentActiveColor, Color parentInactiveColor) {
@@ -172,9 +202,17 @@ public class GUItext extends GUIelement {
         textString = textString.substring(0, textString.length() - 1); 
     }
     
+    public void removeLeftChar() {
+        textString = textString.substring(1);
+    }
+    
     @Override
     public String toString(){
         return this.textString;
+    }
+
+    @Override
+    public void overlayGUI(ImageRepresentation[][] mainImRepMatrix) {
     }
     
 //    public int[] getTextCodes() {

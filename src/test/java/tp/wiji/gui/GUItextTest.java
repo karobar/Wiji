@@ -17,4 +17,39 @@ public class GUItextTest {
         assertEquals(dut.toString(), "test");
         assertTrue(dut.isAncillary());
     }
+    
+    @Test
+    public void testInsertChar() {
+        GUItext dut = new GUItext("123");
+        dut.insertChar(':', 1);
+        assertEquals(dut.toString(), "1:23");
+    }
+    
+    @Test
+    public void testRemoveAllEmpty() { 
+        GUItext dut = new GUItext("");
+        dut.removeAll(':');
+        assertEquals(dut.toString(), "");
+    }
+    
+    @Test
+    public void testRemoveAllTrivial() { 
+        GUItext dut = new GUItext("123");
+        dut.removeAll(':');
+        assertEquals(dut.toString(), "123");
+    }
+    
+    @Test
+    public void testRemoveAll() { 
+        GUItext dut = new GUItext("1:23");
+        dut.removeAll(':');
+        assertEquals(dut.toString(), "123");
+    }
+    
+    @Test
+    public void testRemoveAllTwo() { 
+        GUItext dut = new GUItext("1:23:45");
+        dut.removeAll(':');
+        assertEquals(dut.toString(), "12345");
+    }
 }

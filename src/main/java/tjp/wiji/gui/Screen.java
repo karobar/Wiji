@@ -15,7 +15,7 @@ import tjp.wiji.representations.ImageRepresentation;
  * @version     %I%, %G%
  */
 public abstract class Screen implements EventProcessable {
-    private final Collection<TextList> activeGUIElements = new HashSet<TextList>();
+    private final Collection<GUIelement> activeGUIElements = new HashSet<GUIelement>();
 
     //how long an animation frame lasts
     final private long FRAME_TIME_IN_MS = 1000;
@@ -32,8 +32,8 @@ public abstract class Screen implements EventProcessable {
         this.bitmapContext = bitmapContext;
         this.screenContext = screenContext;
     }
-    protected void addGUIelement(TextList GUIElement) {
-        activeGUIElements.add(GUIElement);
+    protected void addGUIelement(GUIelement GUIelement) {
+        activeGUIElements.add(GUIelement);
     }
     
     protected BitmapContext getBitmapContext() {
@@ -57,8 +57,8 @@ public abstract class Screen implements EventProcessable {
      * the game element representations which are overlaid.
      */
     private void overlayGUI(ImageRepresentation[][] mainImRepMatrix) {
-        for(TextList text : activeGUIElements) {
-            text.overlayGUI(mainImRepMatrix); 
+        for(GUIelement element : activeGUIElements) {
+            element.overlayGUI(mainImRepMatrix); 
         }
     }
     

@@ -10,10 +10,25 @@ import tjp.wiji.representations.ImageRepresentation;
 import tjp.wiji.representations.LetterRepresentation;
 
 public class InputField extends GUIelement {
-    private final GUItext inProgressText;
+    // optional
+    private Color backgroundColor;
+    
+    // optional
     private int emptyLength;
-    private int maximumLength;
 
+    private String emptyPrompt;
+
+    protected final GUItext inProgressText;
+    
+    protected int maximumLength;
+    
+    protected InputField(Color activeColor, Color inactiveColor, int maximumLength) {
+        this.inProgressText = new GUItext("");
+        setCustomInactiveColor(checkNotNull(inactiveColor));
+        setCustomActiveColor(checkNotNull(activeColor));
+        this.maximumLength = maximumLength;
+    }
+    
     public InputField(Color activeColor, Color inactiveColor, 
             int emptyLength, int maximumLength) {
 
@@ -23,28 +38,15 @@ public class InputField extends GUIelement {
         this.emptyLength = emptyLength;
         this.maximumLength = maximumLength;
     }
-    
-    public void push(char newChar) {
-        if (inProgressText.getLength() <= maximumLength) {
-            inProgressText.concat(Character.toString(newChar));
-        }
+
+    public InputField(Color activeColor, Color inactiveColor, 
+            int maximumLength, String emptyPrompt, Color backgroundColor) {
+
+        this(activeColor, inactiveColor, maximumLength);
+        this.emptyPrompt = checkNotNull(emptyPrompt);
+        this.backgroundColor = backgroundColor;
     }
-    
-    @Override
-    public String toString() {
-        return inProgressText.toString();
-    }
-    
-    public void pop() {
-        if (!isEmpty()) {
-            inProgressText.removeLastChar();
-        }
-    }
-    
-    public boolean isEmpty() {
-        return inProgressText.isEmpty();
-    }
-    
+
     @Override
     public ImageRepresentation determineCurrImg(BitmapContext bitmapContext, 
             int currIndex, boolean isActive, Color parentActiveColor, Color parentInactiveColor) {
@@ -52,9 +54,67 @@ public class InputField extends GUIelement {
         checkNotNull(bitmapContext);
         
         if (isEmpty()) {
-            return handleEmpty(bitmapContext, isActive);
+            if (emptyPrompt != null) {
+                return handleEmptyPrompt(bitmapContext, currIndex, isActive);
+            } else {
+                return handleEmptyBlank(bitmapContext, isActive);
+            }
         } else {
             return handleNonEmpty(bitmapContext, currIndex, isActive); 
+        }
+    }
+    
+    @Override
+    public int getLength() {
+        if (isEmpty()) {
+            if (emptyPrompt != null) {
+                return emptyPrompt.length();   
+            } else {
+                return emptyLength;
+            }
+        } else {
+            return inProgressText.getLength();
+        }
+    }
+    
+    private ImageRepresentation handleEmptyBlank(BitmapContext bitmapContext, boolean isActive) {
+        if (isActive){
+            return new GraphicRepresentation(
+                    this.getCustomActiveColor(), 
+                    Color.BLACK, 
+                    Graphic.FILLED_CELL,
+                    bitmapContext.getCharPixelWidth(),
+                    bitmapContext.getCharPixelHeight());
+        } else {
+            checkNotNull(this.getCustomInactiveColor());
+            return new GraphicRepresentation(
+                    this.getCustomInactiveColor(), 
+                    Color.BLACK,
+                    Graphic.FILLED_CELL,
+                    bitmapContext.getCharPixelWidth(),
+                    bitmapContext.getCharPixelHeight());
+        }
+    }
+    
+    private ImageRepresentation handleEmptyPrompt(BitmapContext bitmapContext, 
+            int currIndex, boolean isActive) {
+        char currChar = emptyPrompt.charAt(currIndex);
+        
+        if (isActive){
+            return new LetterRepresentation(
+                    this.getCustomActiveColor(), 
+                    backgroundColor, 
+                    currChar,
+                    bitmapContext.getCharPixelWidth(),
+                    bitmapContext.getCharPixelHeight());
+        } else {
+            checkNotNull(this.getCustomInactiveColor());
+            return new LetterRepresentation(
+                    this.getCustomInactiveColor(), 
+                    backgroundColor,
+                    currChar,
+                    bitmapContext.getCharPixelWidth(),
+                    bitmapContext.getCharPixelHeight());
         }
     }
     
@@ -79,36 +139,51 @@ public class InputField extends GUIelement {
         }
     }
     
-    private ImageRepresentation handleEmpty(BitmapContext bitmapContext, boolean isActive) {
-        if (isActive){
-            return new GraphicRepresentation(
-                    this.getCustomActiveColor(), 
-                    Color.BLACK, 
-                    Graphic.FILLED_CELL,
-                    bitmapContext.getCharPixelWidth(),
-                    bitmapContext.getCharPixelHeight());
-        } else {
-            checkNotNull(this.getCustomInactiveColor());
-            return new GraphicRepresentation(
-                    this.getCustomInactiveColor(), 
-                    Color.BLACK,
-                    Graphic.FILLED_CELL,
-                    bitmapContext.getCharPixelWidth(),
-                    bitmapContext.getCharPixelHeight());
-        }
+    public void insertChar(char insertChar, int index) {
+        inProgressText.insertChar(insertChar, index);
     }
-
-    @Override
-    public int getLength() {
-        if (isEmpty()) {
-            return emptyLength;
-        } else {
-            return inProgressText.getLength();
-        }
-    }
-
+    
     @Override
     public boolean isAncillary() {
         return false;
+    }
+    
+    public boolean isEmpty() {
+        return inProgressText.isEmpty();
+    }
+    
+    @Override
+    public void overlayGUI(ImageRepresentation[][] mainImRepMatrix) {
+    }
+    
+    public void pop() {
+        if (!isEmpty()) {
+            inProgressText.removeLastChar();
+        }
+    }
+    
+    public void push(char newChar) {
+        if (inProgressText.getLength() <= maximumLength) {
+            inProgressText.concat(Character.toString(newChar));
+        }
+    }
+    
+    public void pushLeft(char newChar) {
+        if (inProgressText.getLength() <= maximumLength) {
+            inProgressText.concatLeft(Character.toString(newChar));
+        }
+    }
+
+    public void removeAll(char ch) {
+        inProgressText.removeAll(ch);
+    }
+
+    protected void setEmptyPrompt(String emptyPrompt) {
+        this.emptyPrompt = emptyPrompt;
+    }
+
+    @Override
+    public String toString() {
+        return inProgressText.toString();
     }
 }

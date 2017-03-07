@@ -225,4 +225,22 @@ public class ScreenTextList extends TextList {
     public boolean isCentered() {
         return centered;
     }
+
+    @Override
+    public int getLength() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public ImageRepresentation determineCurrImg(BitmapContext bitmapContext, int currIndex,
+            boolean isActive, Color parentActiveColor, Color parentInactiveColor) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean isAncillary() {
+        return false;
+    }
 }

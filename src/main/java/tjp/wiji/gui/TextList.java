@@ -7,7 +7,7 @@ import tjp.wiji.drawing.Color;
 import tjp.wiji.representations.ImageRepresentation;
 import tjp.wiji.representations.LetterRepresentation;
 
-public abstract class TextList {
+public abstract class TextList extends GUIelement {
     private final List<GUIelement> textList = new ArrayList<GUIelement>();
 
     Color inactiveColor = Color.WHITE;
@@ -105,14 +105,6 @@ public abstract class TextList {
     public abstract int getScreenY();
     
     public abstract boolean isCentered();
-    
-    /**
-     * Overlays the TextCollection onto the specified ImageRepresentation grid.
-     * For ScreenText, this is simply a displayOnto. For MapText, the text must
-     * first be translated from map-space to screen-space.
-     * @param mainImRepMatrix 
-     */
-    public abstract void overlayGUI(ImageRepresentation[][] mainImRepMatrix);
     
     private int findCenterPoint(int width, int stringWidth) {
         return (width - stringWidth) / 2;

@@ -10,6 +10,7 @@ public class Color {
     public static final Color BROWN = new Color(0xFFAA5500);
     public static final Color LIGHT_GRAY = new Color(0xFFAAAAAA);
     public static final Color GRAY = new Color(0xFF555555);
+    public static final Color DARK_GRAY = new Color(0xFF2A2A2A);
     public static final Color LIGHT_BLUE = new Color(0xFF5555FF);
     public static final Color LIGHT_GREEN = new Color(0xFF55FF55);
     public static final Color LIGHT_CYAN = new Color(0xFF55FFFF);

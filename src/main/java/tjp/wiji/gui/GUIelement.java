@@ -38,4 +38,12 @@ public abstract class GUIelement {
     }
     
     public abstract boolean isAncillary();
+    
+    /**
+     * Overlays the TextCollection onto the specified ImageRepresentation grid.
+     * For ScreenText, this is simply a displayOnto. For MapText, the text must
+     * first be translated from map-space to screen-space.
+     * @param mainImRepMatrix 
+     */
+    public abstract void overlayGUI(ImageRepresentation[][] mainImRepMatrix);
 }

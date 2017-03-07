@@ -35,15 +35,29 @@ public class GameEvent {
             new HashSet<Character>(Arrays.asList('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
                     'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'));
     
+    private static final Set<Character> NUMBERS = new HashSet<Character>(
+            Arrays.asList('0', '1', '2', '3', '4', '5', '6', '7', '8', '9'));
+    
+    public boolean isNumber() {
+        return isCharOfType(this.charCode, NUMBERS);
+    }
+    
     public boolean isNormalTypingKey() {
+        return isCharOfType(this.charCode, NORMAL_CHARS);
+    }
+    
+    private boolean isCharOfType(char searchChar, Set<Character> set) {
+        if ('\u0000' == searchChar) {
+            return false;
+        }
+        
         boolean found = false;
         // think the Character wrapper causes problems with ==
-        for (Character ch : NORMAL_CHARS) {
-            if (ch.equals(this.charCode)) {
+        for (Character ch : set) {
+            if (ch.equals(searchChar)) {
                 found = true;
             }
         }
-        
-        return '\u0000' != this.charCode && found;
+        return found;
     }
 }
