@@ -27,6 +27,8 @@ public abstract class Screen implements EventProcessable {
 
     final private BitmapContext bitmapContext;
     final private ScreenContext screenContext;
+    
+    private final int MAX_MISSED_FRAMES = 10;
 
     protected Screen(BitmapContext bitmapContext, ScreenContext screenContext) {
         this.bitmapContext = bitmapContext;
@@ -92,8 +94,14 @@ public abstract class Screen implements EventProcessable {
     }
     
     protected void sendFrameChangeEvery(long frameTime) {
-        if (nanosSinceLastRender > frameTime) {
-            handleFrameChange();
+        long frames = nanosSinceLastRender / frameTime;
+        if (frames > 0) {
+            if (frames > MAX_MISSED_FRAMES) {
+                frames = MAX_MISSED_FRAMES; 
+            }
+            for (int i = 0; i < frames; i++) {
+                handleFrameChange();
+            }
             nanosSinceLastRender = 0;
         }
     }

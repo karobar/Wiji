@@ -29,15 +29,20 @@ public class Color {
         this.RGBhex = RGBhex;
     }
     
-    public float getRed() {
+    public Color(int red, int green, int blue) {
+        java.awt.Color color = new java.awt.Color(red, green, blue);
+        this.RGBhex = color.getRGB();
+    }
+    
+    public float getClampedRed() {
         return ((RGBhex & RED_MASK) >> RED_SHIFT) / SCALE_FACTOR_255_TO_0_1;
     }
     
-    public float getGreen() {
+    public float getClampedGreen() {
         return ((RGBhex & GREEN_MASK) >> GREEN_SHIFT) / SCALE_FACTOR_255_TO_0_1;
     }
     
-    public float getBlue() {
+    public float getClampedBlue() {
         return (RGBhex & BLUE_MASK) / SCALE_FACTOR_255_TO_0_1;
     }
     

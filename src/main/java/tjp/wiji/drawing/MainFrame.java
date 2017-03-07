@@ -107,6 +107,7 @@ public abstract class MainFrame extends ApplicationAdapter
     @Override
     public void dispose() {
         batch.dispose();
+        spriteSheet.dispose();
         shaderContext.getShader().dispose();
         disposeHook();
         System.exit(0);
@@ -143,9 +144,9 @@ public abstract class MainFrame extends ApplicationAdapter
     
     private void configureShaderForCell(final Color backColor, final Color foreColor) {
         shaderContext.getShader().setAttributef("a_backColor",
-                backColor.getRed(), backColor.getGreen(), backColor.getBlue(), 1);
+                backColor.getClampedRed(), backColor.getClampedGreen(), backColor.getClampedBlue(), 1);
         shaderContext.getShader().setAttributef("a_frontColor",
-                foreColor.getRed(), foreColor.getGreen(), foreColor.getBlue(), 1);
+                foreColor.getClampedRed(), foreColor.getClampedGreen(), foreColor.getClampedBlue(), 1);
     }
     
     private void drawBatch(int row, int col, int pixelWidth, int pixelHeight, 

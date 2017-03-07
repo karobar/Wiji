@@ -25,16 +25,16 @@ public class GUItext extends GUIelement {
     public boolean BGthief = false;
     private boolean isAncillary;
     
-    int[] textCodes;
+    //int[] textCodes;
 
-    String textString;
+    String text;
 
     /**
      * Basic constructor for a textString item.
      * @param inName the textString to be displayed
      */
     public GUItext(String text) {
-        this.textString = text;
+        this.text = text;
         //textCodes = Translator.translate(text);
     }
     
@@ -43,7 +43,7 @@ public class GUItext extends GUIelement {
      * @param inName the textString to be displayed
      */
     public GUItext(String text, boolean isAncillary) {
-        this.textString = text;
+        this.text = text;
         this.isAncillary = true;
     }
 
@@ -52,14 +52,14 @@ public class GUItext extends GUIelement {
      * @param inName the textString to be displayed
      */
     public GUItext(String text, Color color, boolean isAncillary) {
-        this.textString = text;
+        this.text = text;
         setCustomInactiveColor(checkNotNull(color));
         setCustomActiveColor(checkNotNull(color));
         this.isAncillary = true;
     }
     
     public GUItext(String text, Color activeColor, Color inactiveColor) {
-        this.textString = text;
+        this.text = text;
         setCustomInactiveColor(checkNotNull(inactiveColor));
         setCustomActiveColor(checkNotNull(activeColor));
         //textCodes = Translator.translate(text);
@@ -72,7 +72,7 @@ public class GUItext extends GUIelement {
      * @param inSpecY the y position of the textString item
      */
     public GUItext(String text, int specX, int specY) {
-        this.textString = text;
+        this.text = text;
         //textCodes = Translator.translate(text);
         this.customX = specX;
         this.customY = specY;
@@ -85,32 +85,40 @@ public class GUItext extends GUIelement {
      * @param inSpecY the y position of the textString item
      */
     public GUItext(String text, int specX, int specY, boolean isAncillary) {
-        this.textString = text;
+        this.text = text;
         this.customX = specX;
         this.customY = specY;
         this.isAncillary = true;
     }
     
     public char charAt(int index) {
-        return textString.charAt(index);
+        return text.charAt(index);
+    }
+    
+    public void setText(String text) {
+        this.text = text;
+    }
+    
+    public void clear() {
+        text = "";
     }
     
     public String concat(String str) {
-        String newString = textString.concat(str);
-        textString = newString;
+        String newString = text.concat(str);
+        text = newString;
         return newString;
     }
     
     public void insertChar(char insertChar, int index) {
-        if (index >= 0 && index < textString.length()) {
-            String leftPart = textString.substring(0, index);
-            String rightPart = textString.substring(index);
-            textString = leftPart + insertChar + rightPart;
+        if (index >= 0 && index < text.length()) {
+            String leftPart = text.substring(0, index);
+            String rightPart = text.substring(index);
+            text = leftPart + insertChar + rightPart;
         }
     }
     
     public void removeAll(char ch) {
-        textString = removeAlls(ch, textString);
+        text = removeAlls(ch, text);
     }
     
     private String removeAlls(char ch, String str) {
@@ -126,8 +134,8 @@ public class GUItext extends GUIelement {
     }
     
     public String concatLeft(String str) {
-        String newString = str.concat(textString);
-        textString = newString;
+        String newString = str.concat(text);
+        text = newString;
         return newString;
     }
     
@@ -178,7 +186,7 @@ public class GUItext extends GUIelement {
     
     @Override
     public int getLength() {
-        return this.textString.length();
+        return this.text.length();
     } 
     
     @Override
@@ -195,20 +203,20 @@ public class GUItext extends GUIelement {
 //    }
     
     public boolean isEmpty() {
-        return textString.isEmpty();
+        return text.isEmpty();
     }
 
     public void removeLastChar() {
-        textString = textString.substring(0, textString.length() - 1); 
+        text = text.substring(0, text.length() - 1); 
     }
     
     public void removeLeftChar() {
-        textString = textString.substring(1);
+        text = text.substring(1);
     }
     
     @Override
     public String toString(){
-        return this.textString;
+        return this.text;
     }
 
     @Override

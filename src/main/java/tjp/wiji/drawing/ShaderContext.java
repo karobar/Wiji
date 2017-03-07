@@ -1,9 +1,6 @@
 package tjp.wiji.drawing;
 
-import java.io.File;
 import java.net.URISyntaxException;
-import java.net.URL;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
