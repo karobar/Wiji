@@ -113,6 +113,10 @@ public abstract class Screen implements EventProcessable {
     public void stepScreenForwards(Screen newScreen) {
         screenContext.stepScreenForwards(newScreen);
     }
+     
+    public void shadowStepForwards(Screen newScreen) {
+        screenContext.shadowStepForwards(newScreen);
+    }
     
     public abstract void stepToScreenTrigger();
 }

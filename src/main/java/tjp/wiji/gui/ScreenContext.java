@@ -29,6 +29,14 @@ public class ScreenContext {
         grandparentScreen = greatGrandparentScreen;
         currentScreen.stepToScreenTrigger();
     }
+    
+    
+    public void shadowStepForwards(Screen newScreen) {
+        greatGrandparentScreen = grandparentScreen;
+        grandparentScreen = previousScreen;
+        currentScreen = newScreen;
+        currentScreen.stepToScreenTrigger();
+    }
 
     /**
      * used when creating a new screen to make sure that the user can return to 
