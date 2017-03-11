@@ -88,6 +88,7 @@ public abstract class TextList extends GUIelement {
         if (textList.get(currentChoiceIndex).isAncillary()) {
             cycleUp();
         }
+        cycleUpHook();
     }
     
     /**
@@ -98,7 +99,12 @@ public abstract class TextList extends GUIelement {
         if (textList.get(currentChoiceIndex).isAncillary()) {
             cycleDown();
         }
+        cycleDownHook();
     }
+
+    protected abstract void cycleUpHook();
+
+    protected abstract void cycleDownHook();
     
     public abstract int getScreenX();
     
@@ -106,10 +112,35 @@ public abstract class TextList extends GUIelement {
     
     public abstract boolean isCentered();
     
-    private int findCenterPoint(int width, int stringWidth) {
+    protected int findCenterPoint(int width, int stringWidth) {
         return (width - stringWidth) / 2;
     }
     
+    protected GUIelement get(int index) {
+        return textList.get(index);
+    }
+    
+    protected int calculateOffset() {
+        return 0;
+    }
+    
+    protected int getListHeight() {
+        return getHeight();
+    }
+    
+    protected ImageRepresentation getCurrImg(GUIelement currElement, BitmapContext bitmapContext,
+            int index, boolean isActive, boolean isTertiary) {
+
+  
+        return currElement.determineCurrImg(bitmapContext, index, 
+                isActive, getActiveColor(), getInactiveColor());
+    }
+    
+    private GUIelement tertiaryElement;
+    
+    public void setTertiaryElement(GUIelement tertiaryElement) {
+        this.tertiaryElement = tertiaryElement;
+    }
     
     /**
      * Overwrites screen squares with the choiceList.
@@ -123,8 +154,8 @@ public abstract class TextList extends GUIelement {
     public void displayOnto(ImageRepresentation[][] displayArea, BitmapContext bitmapContext) {
         int currentY = getScreenY();
         //cycle through all the GUI elements
-        for(int i = 0; i < textList.size(); i++){
-            GUIelement currElement = textList.get(i);
+        for(int i = 0; i < getListHeight(); i++){
+            GUIelement currElement = get(i + calculateOffset());
             
             int currentX;
             if (this.isCentered()) {
@@ -133,9 +164,10 @@ public abstract class TextList extends GUIelement {
                 currentX = getScreenX();
             }
             for(int j = 0; j < currElement.getLength() ;j++){
-                boolean isActive = (i == currentChoiceIndex);
-                ImageRepresentation currentImg = currElement.determineCurrImg(bitmapContext, j, 
-                        isActive, getActiveColor(), getInactiveColor());
+                boolean isActive = (i + calculateOffset() == currentChoiceIndex);
+                boolean isTertiary = (get(i + calculateOffset()) == tertiaryElement);
+                ImageRepresentation currentImg = getCurrImg(currElement, bitmapContext,
+                        j, isActive, isTertiary);
                 
                 int x = (currElement.customX >= 0) ? currElement.customX + j :  currentX;
                 int y = (currElement.customY >= 0) ? currElement.customY : currentY;

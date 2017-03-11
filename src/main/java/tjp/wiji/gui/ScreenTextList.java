@@ -11,22 +11,52 @@ import tjp.wiji.representations.ImageRepresentation;
  * @version     %I%, %G%
  */
 public class ScreenTextList extends TextList {
-    private int screenX, screenY;
-    private BitmapContext bitmapContext;
-    private boolean centered = false;
-    
     public static class ScreenTextListBuilder {
-        private int x, y;
         private BitmapContext bitmapContext;
-        private String initialItem;
-        private Color inactiveColor, activeColor;
-//        private int width = 0;
-//        private int height = 0;
+
         private boolean centered = false;
         //private CellDimensions dims;
+        private Color inactiveColor, activeColor;
+        private String initialItem;
+        private int x, y;
+        
+        public ScreenTextListBuilder activeColor(Color activeColor) {
+            this.activeColor = activeColor;
+            return this;
+        }
         
         public ScreenTextListBuilder bitmapContext(BitmapContext bitmapContext) {
             this.bitmapContext = bitmapContext;
+            return this;
+        }
+        
+        /**
+         * TODO: add all sorts of checks to make sure required combinations
+         * are provided in full.
+         * @return
+         */
+        public ScreenTextList build() {
+            return new ScreenTextList(this);
+        }
+        
+        public ScreenTextListBuilder centered() {
+            this.centered = true;
+            return this;
+        }
+        
+        public ScreenTextListBuilder color(Color color) {
+            this.inactiveColor = color;
+            this.activeColor = color;
+            return this;
+        }
+        
+        public ScreenTextListBuilder inactiveColor(Color inactiveColor) {
+            this.inactiveColor = inactiveColor;
+            return this;
+        }
+        
+        public ScreenTextListBuilder initialItem(String initialItem) {
+            this.initialItem = initialItem;
             return this;
         }
         
@@ -39,44 +69,111 @@ public class ScreenTextList extends TextList {
             this.y = y;
             return this;
         }
-        
-        public ScreenTextListBuilder inactiveColor(Color inactiveColor) {
-            this.inactiveColor = inactiveColor;
-            return this;
-        }
-        
-        public ScreenTextListBuilder activeColor(Color activeColor) {
-            this.activeColor = activeColor;
-            return this;
-        }
-        
-        public ScreenTextListBuilder color(Color color) {
-            this.inactiveColor = color;
-            this.activeColor = color;
-            return this;
-        }
-        
-        public ScreenTextListBuilder initialItem(String initialItem) {
-            this.initialItem = initialItem;
-            return this;
-        }
-        
-        public ScreenTextListBuilder centered() {
-            this.centered = true;
-            return this;
-        }
-        
-        /**
-         * TODO: add all sorts of checks to make sure required combinations
-         * are provided in full.
-         * @return
-         */
-        public ScreenTextList build() {
-            return new ScreenTextList(this);
-        }
+    }
+    public static ScreenTextListBuilder newBuilder() {
+        return new ScreenTextListBuilder();
+    }
+    protected BitmapContext bitmapContext;
+    
+    protected boolean centered = false;
+    
+    protected int screenX, screenY;
+    
+    protected ScreenTextList() { }
+    
+    /**
+     * Basic Constructor for TextCollection for text which does not change 
+     * colors and contains one text item.
+     * @param 
+     * @param inInactive color of the text
+     * @param x position of upper-left corner of the list (assuming 
+     *        position is not explicitly assigned with GUIText.specX)
+     * @param y position of upper-left corner of the list (assuming 
+     *        position is not explicitly assigned with GUIText.specY)
+     */
+    public ScreenTextList(BitmapContext bitmapContext, CellDimensions dimension,
+              Color inInactive, String initialItem, int x, int y) {
+    
+          this.bitmapContext = bitmapContext;
+          this.inactiveColor = inInactive;
+          this.activeColor = null;
+          this.screenX = x;
+          this.screenY = y;
+          this.add(new GUItext(initialItem));
     }
     
-    private ScreenTextList(ScreenTextListBuilder builder) {
+    /**
+     * Augmented Base constructor for text which changes color and which does not have
+     * coordinates. 
+     * @param inInactive color of the text
+     * @param inputActive color of the text when active
+   */
+   public ScreenTextList(final BitmapContext bitmapContext, 
+           Color inInactive, Color inputActive){
+
+       this.bitmapContext = bitmapContext;
+       this.inactiveColor = inInactive;
+       this.activeColor   = inputActive;
+   }
+    
+    /**
+      * Augmented Base constructor for text which changes color. 
+      * @param inInactive color of the text
+      * @param inputActive color of the text when active
+      * @param x position of upper-left corner of the list (assuming 
+      *        position is not explicitly assigned with GUIText.specX)
+      * @param y position of upper-left corner of the list (assuming 
+      *        position is not explicitly assigned with GUIText.specY)
+    */
+    public ScreenTextList(final BitmapContext bitmapContext, Color inInactive, Color inputActive, 
+            int x, int y){
+
+        this.bitmapContext = bitmapContext;
+        this.inactiveColor = inInactive;
+        this.activeColor   = inputActive;
+        this.screenX = x;
+        this.screenY = y;
+    }
+   
+    /**
+      * Basic Constructor for TextCollection for text which does not change 
+      * colors.
+      * @param inInactive color of the text
+      * @param x position of upper-left corner of the list (assuming 
+      *        position is not explicitly assigned with GUIText.specX)
+      * @param y position of upper-left corner of the list (assuming 
+      *        position is not explicitly assigned with GUIText.specY)
+    */
+    public ScreenTextList(BitmapContext bitmapContext, Color inInactive, int x, int y) {
+        this.bitmapContext = bitmapContext;
+        this.inactiveColor = inInactive;
+        this.activeColor = null;
+        this.screenX = x;
+        this.screenY = y;
+    }
+
+     /**
+     * Basic Constructor for TextCollection for text which does not change 
+     * colors and contains one text item.
+     * @param 
+     * @param inInactive color of the text
+     * @param x position of upper-left corner of the list (assuming 
+     *        position is not explicitly assigned with GUIText.specX)
+     * @param y position of upper-left corner of the list (assuming 
+     *        position is not explicitly assigned with GUIText.specY)
+   */
+   public ScreenTextList(BitmapContext bitmapContext,
+           Color inInactive, String initialItem, int x, int y) {
+
+       this.bitmapContext = bitmapContext;
+       this.inactiveColor = inInactive;
+       this.activeColor = null;
+       this.screenX = x;
+       this.screenY = y;
+       this.add(new GUItext(initialItem));
+   }
+    
+    protected ScreenTextList(ScreenTextListBuilder builder) {
         this.bitmapContext = builder.bitmapContext;
         
         
@@ -102,101 +199,18 @@ public class ScreenTextList extends TextList {
         }
     }
     
-    public static ScreenTextListBuilder newBuilder() {
-        return new ScreenTextListBuilder();
+    @Override
+    public ImageRepresentation determineCurrImg(BitmapContext bitmapContext, int currIndex,
+            boolean isActive, Color parentActiveColor, Color parentInactiveColor) {
+        // TODO Auto-generated method stub
+        return null;
     }
     
-    /**
-      * Basic Constructor for TextCollection for text which does not change 
-      * colors.
-      * @param inInactive color of the text
-      * @param x position of upper-left corner of the list (assuming 
-      *        position is not explicitly assigned with GUIText.specX)
-      * @param y position of upper-left corner of the list (assuming 
-      *        position is not explicitly assigned with GUIText.specY)
-    */
-    public ScreenTextList(BitmapContext bitmapContext, Color inInactive, int x, int y) {
-        this.bitmapContext = bitmapContext;
-        this.inactiveColor = inInactive;
-        this.activeColor = null;
-        this.screenX = x;
-        this.screenY = y;
+    @Override
+    public int getLength() {
+        // TODO Auto-generated method stub
+        return 0;
     }
-    
-    /**
-     * Basic Constructor for TextCollection for text which does not change 
-     * colors and contains one text item.
-     * @param 
-     * @param inInactive color of the text
-     * @param x position of upper-left corner of the list (assuming 
-     *        position is not explicitly assigned with GUIText.specX)
-     * @param y position of upper-left corner of the list (assuming 
-     *        position is not explicitly assigned with GUIText.specY)
-   */
-   public ScreenTextList(BitmapContext bitmapContext,
-           Color inInactive, String initialItem, int x, int y) {
-
-       this.bitmapContext = bitmapContext;
-       this.inactiveColor = inInactive;
-       this.activeColor = null;
-       this.screenX = x;
-       this.screenY = y;
-       this.add(new GUItext(initialItem));
-   }
-   
-   /**
-    * Basic Constructor for TextCollection for text which does not change 
-    * colors and contains one text item.
-    * @param 
-    * @param inInactive color of the text
-    * @param x position of upper-left corner of the list (assuming 
-    *        position is not explicitly assigned with GUIText.specX)
-    * @param y position of upper-left corner of the list (assuming 
-    *        position is not explicitly assigned with GUIText.specY)
-  */
-  public ScreenTextList(BitmapContext bitmapContext, CellDimensions dimension,
-          Color inInactive, String initialItem, int x, int y) {
-
-      this.bitmapContext = bitmapContext;
-      this.inactiveColor = inInactive;
-      this.activeColor = null;
-      this.screenX = x;
-      this.screenY = y;
-      this.add(new GUItext(initialItem));
-  }
-
-     /**
-      * Augmented Base constructor for text which changes color. 
-      * @param inInactive color of the text
-      * @param inputActive color of the text when active
-      * @param x position of upper-left corner of the list (assuming 
-      *        position is not explicitly assigned with GUIText.specX)
-      * @param y position of upper-left corner of the list (assuming 
-      *        position is not explicitly assigned with GUIText.specY)
-    */
-    public ScreenTextList(final BitmapContext bitmapContext, Color inInactive, Color inputActive, 
-            int x, int y){
-
-        this.bitmapContext = bitmapContext;
-        this.inactiveColor = inInactive;
-        this.activeColor   = inputActive;
-        this.screenX = x;
-        this.screenY = y;
-    }
-    
-    /**
-     * Augmented Base constructor for text which changes color and which does not have
-     * coordinates. 
-     * @param inInactive color of the text
-     * @param inputActive color of the text when active
-   */
-   public ScreenTextList(final BitmapContext bitmapContext, 
-           Color inInactive, Color inputActive){
-
-       this.bitmapContext = bitmapContext;
-       this.inactiveColor = inInactive;
-       this.activeColor   = inputActive;
-   }
     
     @Override
     public int getScreenX() {
@@ -208,17 +222,9 @@ public class ScreenTextList extends TextList {
         return screenY;
     }
     
-    void setScreenX(int inX) {
-        screenX = inX;
-    }
-    
-    void setScreenY(int inY) {
-        screenY = inY;
-    }
-    
     @Override
-    public void overlayGUI(ImageRepresentation[][] mainImRepMatrix) {
-        displayOnto(mainImRepMatrix, bitmapContext);
+    public boolean isAncillary() {
+        return false;
     }
 
     @Override
@@ -227,20 +233,21 @@ public class ScreenTextList extends TextList {
     }
 
     @Override
-    public int getLength() {
-        // TODO Auto-generated method stub
-        return 0;
+    public void overlayGUI(ImageRepresentation[][] mainImRepMatrix) {
+        displayOnto(mainImRepMatrix, bitmapContext);
+    }
+
+    void setScreenX(int inX) {
+        screenX = inX;
+    }
+
+    void setScreenY(int inY) {
+        screenY = inY;
     }
 
     @Override
-    public ImageRepresentation determineCurrImg(BitmapContext bitmapContext, int currIndex,
-            boolean isActive, Color parentActiveColor, Color parentInactiveColor) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+    protected void cycleUpHook() {}
 
     @Override
-    public boolean isAncillary() {
-        return false;
-    }
+    protected void cycleDownHook() {}    
 }
