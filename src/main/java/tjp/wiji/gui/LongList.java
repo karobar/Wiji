@@ -125,6 +125,10 @@ public class LongList<T extends Object> extends ScreenTextList {
     
     @Override
     protected int calculateOffset() {
+        if (endY == 0) {
+            return 0;
+        }
+        
         int topOfScreen = getScreenY();
         
         int totalHeightOnScreen = getListHeight();
@@ -210,6 +214,10 @@ public class LongList<T extends Object> extends ScreenTextList {
     
     @Override
     protected int getListHeight() {
-        return endY - getScreenY();
+        if (endY > 0) {
+            return endY - getScreenY();
+        } else {
+            return getHeight();
+        }
     }
 }
