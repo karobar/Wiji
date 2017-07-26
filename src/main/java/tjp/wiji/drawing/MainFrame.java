@@ -48,7 +48,6 @@ public abstract class MainFrame extends ApplicationAdapter
     
     @Override
     public void create() {        
-        //eventProcessor = new EventProcessor(currentScreen);
         Gdx.input.setInputProcessor(this);
         
         batch = new SpriteBatch();
@@ -74,11 +73,13 @@ public abstract class MainFrame extends ApplicationAdapter
         return screenContext.getCurrentScreen();
     }
     
-    protected int getImageGridHeight() {
+    //temporarily kludged to be public, please make protected
+    public int getImageGridHeight() {
         return heightInSlots;
     }
-    
-    protected int getImageGridWidth() {
+
+    //temporarily kludged to be public, please make protected
+    public int getImageGridWidth() {
         return widthInSlots;
     }
     
@@ -116,9 +117,7 @@ public abstract class MainFrame extends ApplicationAdapter
     protected abstract void disposeHook();
 
     @Override
-    public void render () {
-//        eventProcessor.processEventList(getCurrentScreen());
-        
+    public void render () {        
         timeSinceLastRender = System.nanoTime() - startTime;
         ImageRepresentation[][] cellsToDraw = getCurrentScreen().render(timeSinceLastRender/1000, 
                 getImageGridWidth(), getImageGridHeight());
@@ -149,6 +148,14 @@ public abstract class MainFrame extends ApplicationAdapter
                 foreColor.getClampedRed(), foreColor.getClampedGreen(), foreColor.getClampedBlue(), 1);
     }
     
+    /**
+     * 
+     * @param row
+     * @param col
+     * @param pixelWidth
+     * @param pixelHeight
+     * @param currCell
+     */
     private void drawBatch(int row, int col, int pixelWidth, int pixelHeight, 
             ImageRepresentation currCell) {
         
